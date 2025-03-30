@@ -1,0 +1,148 @@
+<div class="book-detail-container" *ngIf="book; else loading">
+    <div class="book-header">
+      <button class="back-button" (click)="goBack()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <div class="book-title">
+        <h1>{{ book.title }}</h1>
+      </div>
+    </div>
+    
+    <div class="book-content">
+      <div class="book-cover-section">
+        <div class="book-cover-container">
+          <img [src]="book.cover" [alt]="book.title" />
+        </div>
+        
+        <div class="book-actions">
+          <select 
+            class="book-status-select" 
+            [ngModel]="userBook?.status" 
+            (ngModelChange)="updateBookStatus($event)"
+          >
+            <option value="">Add to My Books</option>
+            <option value="want-to-read">Want to Read</option>
+            <option value="currently-reading">Currently Reading</option>
+            <option value="read">Read</option>
+          </select>
+          
+          <button 
+            class="action-button start-reading" 
+            *ngIf="userBook?.status === 'want-to-read'"
+            (click)="updateBookStatus('currently-reading')"
+          >
+            Start Reading
+          </button>
+          
+          <button 
+            class="action-button track-progress" 
+            *ngIf="userBook?.status === 'currently-reading'"
+            (click)="openProgressTracker()"
+          >
+            Track Progress
+          </button>
+        </div>
+      </div>
+      
+      <div class="book-info-container">
+        <div class="book-author">by {{ book.author }}</div>
+        
+        <div class="book-meta-info">
+          <div class="meta-item">
+            <div class="meta-label">Published</div>
+            <div class="meta-value">{{ book.published | date:'mediumDate' }}</div>
+          </div>
+          
+          <div class="meta-item">
+            <div class="meta-label">Pages</div>
+            <div class="meta-value">{{ book.pages }}</div>
+          </div>
+          
+          <div class="meta-item">
+            <div class="meta-label">Rating</div>
+            <div class="meta-value">{{ book.avgRating.toFixed(1) }} ★</div>
+          </div>
+        </div>
+        
+        <div class="book-description">
+          <p>{{ book.description }}</p>
+        </div>
+        
+        <div class="book-genres">
+          <span class="genre-tag" *ngFor="let genre of book.genres">{{ genre }}</span>
+        </div>
+        
+        <div class="reviews-section" *ngIf="userBook?.status === 'read'">
+          <h2>Your Review</h2>
+          
+          <div class="review-form">
+            <div class="rating-selector">
+              <p>Your Rating:</p>
+              <div class="rating-stars">
+                <span 
+                  class="star" 
+                  *ngFor="let star of [1, 2, 3, 4, 5]" 
+                  [class.filled]="star <= userRating"
+                  (click)="setRating(star)"
+                >★</span>
+              </div>
+            </div>
+            
+            <textarea 
+              class="review-textarea" 
+              [(ngModel)]="userReview" 
+              placeholder="Write your review here..."
+            ></textarea>
+            
+            <button class="review-submit" (click)="submitReview()">Submit Review</button>
+          </div>
+        </div>
+        
+        <app-book-review *ngIf="book.id" [bookId]="book.id"></app-book-review>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #loading>
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Loading book details...</p>
+    </div>
+  </ng-template>
+  
+  <div *ngIf="progressTrackerOpen" class="progress-tracker-modal">
+    <div class="modal-content">
+      <h3>Track Your Reading Progress</h3>
+      <button class="close-modal" (click)="closeProgressTracker()">×</button>
+      
+      <div class="progress-form">
+        <div class="form-group">
+          <label for="current-page">Current Page</label>
+          <input type="number" id="current-page" [(ngModel)]="currentPage" min="1" [max]="book?.pages || 1000">
+        </div>
+        
+        <div class="form-group">
+          <label for="minutes-read">Minutes Read</label>
+          <input type="number" id="minutes-read" [(ngModel)]="minutesRead" min="1">
+        </div>
+        
+        <div class="form-group">
+          <label for="reading-notes">Notes (optional)</label>
+          <textarea id="reading-notes" [(ngModel)]="readingNotes"></textarea>
+        </div>
+        
+        <div class="progress-stats" *ngIf="book">
+          <p>Progress: {{ (currentPage / book.pages * 100).toFixed(0) }}%</p>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="(currentPage / book.pages * 100)"></div>
+          </div>
+        </div>
+        
+        <button class="save-progress" (click)="saveReadingProgress()">Save Progress</button>
+      </div>
+    </div>
+  </div>
+  
+  

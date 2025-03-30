@@ -1,0 +1,38 @@
+<div class="community-reviews">
+    <h2>Community Reviews</h2>
+    
+    <div *ngIf="isLoading" class="loading-reviews">
+      <div class="loading-spinner"></div>
+      <p>Loading reviews...</p>
+    </div>
+    
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+    
+    <div *ngIf="!isLoading && !error">
+      <div *ngIf="reviews.length === 0" class="no-reviews">
+        <p>No reviews yet. Be the first to review this book!</p>
+      </div>
+      
+      <div *ngIf="reviews.length > 0" class="reviews-list">
+        <div class="review-card" *ngFor="let review of reviews">
+          <div class="review-header">
+            <div class="reviewer-info">
+              <span class="reviewer-name">{{ review.username }}</span>
+              <span class="review-date">{{ review.date | date:'mediumDate' }}</span>
+            </div>
+            <div class="review-rating">
+              <span class="stars">{{ getStarRating(review.rating) }}</span>
+            </div>
+          </div>
+          
+          <div class="review-content">
+            <p>{{ review.reviewText }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
