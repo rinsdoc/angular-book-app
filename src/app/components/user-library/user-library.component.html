@@ -1,0 +1,71 @@
+<!-- user-library.component.html -->
+<div class="library-container">
+  <h2>My Library</h2>
+
+  <div class="library-tabs">
+    <button [class.active]="activeTab === 'all'" (click)="filterByTab('all')">
+      All Books
+    </button>
+
+    <button
+      [class.active]="activeTab === 'reading'"
+      (click)="filterByTab('reading')"
+    >
+      Currently Reading
+    </button>
+
+    <button
+      [class.active]="activeTab === 'toRead'"
+      (click)="filterByTab('toRead')"
+    >
+      Want to Read
+    </button>
+
+    <button [class.active]="activeTab === 'read'" (click)="filterByTab('read')">
+      Read
+    </button>
+  </div>
+
+  <div class="library-books">
+    <div class="library-book" *ngFor="let userBook of filteredBooks">
+      <div class="book-cover">
+        <img [src]="userBook.book?.cover" [alt]="userBook.book?.title" />
+      </div>
+
+      <div class="book-details">
+        <h3>{{ userBook.book?.title }}</h3>
+        <p>by {{ userBook.book?.author }}</p>
+
+        <div class="status-control">
+          <select
+            [ngModel]="userBook.status"
+            (ngModelChange)="updateStatus(userBook.id, $event)"
+          >
+            <option value="want-to-read">Want to Read</option>
+            <option value="currently-reading">Currently Reading</option>
+            <option value="read">Read</option>
+          </select>
+        </div>
+
+        <div class="book-meta" *ngIf="userBook.status === 'read'">
+          <div class="rating" *ngIf="userBook.rating">
+            <span>Your Rating: {{ userBook.rating }} ★</span>
+          </div>
+          <div
+            class="dates"
+            *ngIf="userBook.dateStarted && userBook.dateFinished"
+          >
+            <span
+              >Read from {{ userBook.dateStarted }} to
+              {{ userBook.dateFinished }}</span
+            >
+          </div>
+        </div>
+
+        <a [routerLink]="['/books', userBook.bookId]" class="view-btn"
+          >View Details</a
+        >
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,127 @@
+/* user-library.component.css */
+.library-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .library-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .library-tabs {
+    display: flex;
+    background-color: var(--card-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .library-tabs button {
+    flex: 1;
+    background: none;
+    padding: 1rem;
+    border-radius: 0;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 3px solid transparent;
+    transition: var(--transition);
+  }
+  
+  .library-tabs button:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    transform: none;
+  }
+  
+  .library-tabs button.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+  }
+  
+  .library-books {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .library-book {
+    display: flex;
+    background-color: var(--card-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+  }
+  
+  .library-book:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .library-book .book-cover {
+    width: 120px;
+    height: 180px;
+    flex-shrink: 0;
+  }
+  
+  .library-book .book-details {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .library-book h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  .library-book p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+  }
+  
+  .status-control {
+    margin-bottom: 1.5rem;
+  }
+  
+  .status-control select {
+    width: 100%;
+    max-width: 200px;
+    padding: 0.5rem;
+  }
+  
+  .book-meta {
+    margin-bottom: 1rem;
+  }
+  
+  .rating {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  
+  .rating span {
+    color: #ffc107;
+  }
+  
+  .dates {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+  
+  .view-btn {
+    align-self: flex-start;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    margin-top: auto;
+  }
+  
+  .view-btn:hover {
+    background-color: var(--primary-light);
+    text-decoration: none;
+  }
