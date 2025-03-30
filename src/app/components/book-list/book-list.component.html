@@ -1,0 +1,54 @@
+<!-- book-list.component.html -->
+<div class="book-list-container">
+  <div class="book-list-header">
+    <h2>Discover Books</h2>
+  
+    <div class="filters">
+      <div class="search-bar">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (keyup)="searchBooks()"
+          placeholder="Search by title or author..."
+        />
+      </div>
+  
+      <div class="genre-filter">
+        <select [(ngModel)]="selectedGenre" (change)="filterByGenre()">
+          <option value="">All Genres</option>
+          <option *ngFor="let genre of genres" [value]="genre">
+            {{ genre }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Loading books...</p>
+  </div>
+
+  <div class="book-grid" *ngIf="!isLoading">
+    <div *ngIf="filteredBooks.length === 0" class="no-results">
+      <p>No books found matching your criteria.</p>
+      <button (click)="resetFilters()">Reset Filters</button>
+    </div>
+    
+    <div class="book-card" *ngFor="let book of filteredBooks; let i = index" [style.animation-delay.ms]="i * 100">
+      <div class="book-cover">
+        <img [src]="book.cover" [alt]="book.title" />
+      </div>
+      <div class="book-info">
+        <h3>{{ book.title }}</h3>
+        <p class="author">by {{ book.author }}</p>
+        <div class="book-meta">
+          <span class="rating">{{ book.avgRating.toFixed(1) }}</span>
+          <span class="genres">{{ book.genres.join(", ") }}</span>
+        </div>
+        <a [routerLink]="['/books', book.id]" class="details-btn">View Details</a>
+      </div>
+    </div>
+  </div>
+</div>
+
