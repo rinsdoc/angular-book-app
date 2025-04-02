@@ -1,7 +1,7 @@
 import { Component, Input, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
-import type { Observable } from "rxjs"
+import { type Observable, catchError, map, of, tap } from "rxjs"
 
 interface Review {
   id: number
@@ -10,6 +10,7 @@ interface Review {
   rating: number
   reviewText: string
   date: string
+  bookId: number
 }
 
 @Component({
@@ -24,6 +25,7 @@ export class BookReviewComponent implements OnInit {
   reviews: Review[] = []
   isLoading = true
   error: string | null = null
+  private reviewsUrl = "/assets/reviews.json"
 
   constructor(private http: HttpClient) {}
 
@@ -41,7 +43,7 @@ export class BookReviewComponent implements OnInit {
         this.isLoading = false
       },
       error: (err) => {
-        this.error = "Failed to load reviews. Please try again later."
+        this.error = `Failed to load reviews. Error: ${err.message}`
         this.isLoading = false
         console.error("Error loading reviews:", err)
       },
@@ -49,9 +51,15 @@ export class BookReviewComponent implements OnInit {
   }
 
   getReviewsForBook(bookId: number): Observable<Review[]> {
-    // In a real app, this would be a proper API call
-    // For this demo, we'll simulate it with a local endpoint
-    return this.http.get<Review[]>(`http://localhost:3000/reviews?bookId=${bookId}`)
+    console.log(`Fetching reviews from ${this.reviewsUrl} for book ${bookId}`)
+    return this.http.get<Review[]>(this.reviewsUrl).pipe(
+      map((reviews) => reviews.filter((review) => review.bookId === bookId)),
+      tap((reviews) => console.log(`Found ${reviews.length} reviews for book ${bookId}:`, reviews)),
+      catchError((err) => {
+        console.error(`Error fetching reviews for book ${bookId}:`, err)
+        return of([])
+      }),
+    )
   }
 
   getStarRating(rating: number): string {

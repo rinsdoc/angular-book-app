@@ -1,6 +1,6 @@
 import { Injectable, signal } from "@angular/core"
-import { HttpClient } from "@angular/common/http"
-import { type Observable, tap, catchError, of, map } from "rxjs"
+import type { HttpClient } from "@angular/common/http"
+import { type Observable, tap, catchError, of, map, delay, switchMap } from "rxjs"
 
 // Book interfaces
 export interface Book {
@@ -30,7 +30,8 @@ export interface UserBook {
   providedIn: "root",
 })
 export class BookService {
-  private apiUrl = "assets" // Path to the local assets directory
+  private apiUrl = "/assets/books.json" // Path to the books.json file in assets
+  private userBooksUrl = "/assets/user-books.json" // Path to the user-books.json file in assets
 
   // Signals for reactive state management
   books = signal<Book[]>([])
@@ -51,7 +52,7 @@ export class BookService {
         this.isLoading.set(false)
       },
       error: (err) => {
-        this.error.set("Failed to load books. Please try again later.")
+        this.error.set(`Failed to load books. Error: ${err.message}`)
         this.books.set([]) // Ensure books signal is cleared on error
         this.isLoading.set(false)
         console.error("Error loading books:", err)
@@ -60,35 +61,41 @@ export class BookService {
   }
 
   getAllBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(`${this.apiUrl}/books.json`).pipe( // Adjusted to fetch books.json
-      tap((books) => console.log("Fetched books from local JSON:", books)), // Debug log
+    console.log("Fetching books from:", this.apiUrl)
+    return this.http.get<Book[]>(this.apiUrl).pipe(
+      tap((books) => console.log("Fetched books:", books)),
       catchError((err) => {
-        console.error("Error fetching books from local JSON:", err)
-        return of([]) // Return an empty array on error
+        console.error("Error fetching books:", err)
+        this.error.set(`Failed to load books from ${this.apiUrl}. Error: ${err.message}`)
+        return of([])
       }),
     )
   }
 
-  getBookById(id: number): Observable<Book> {
-    return this.http.get<Book[]>(`${this.apiUrl}/books.json`).pipe( // Fetch all books
-      tap((books) => console.log("Fetched books for ID lookup:", books)), // Debug log
-      map((books) => books.find((book) => book.id === id)!), // Find the book by ID
+  getBookById(id: number): Observable<Book | null> {
+    return this.http.get<Book[]>(this.apiUrl).pipe(
+      tap((books) => console.log("Fetched books for ID lookup:", books)),
+      map((books) => books.find((book) => book.id === id) || null),
       catchError((err) => {
-        console.error(`Error fetching book with id ${id} from local JSON:`, err)
-        throw err
+        console.error(`Error fetching book with id ${id}:`, err)
+        this.error.set(`Failed to load book details. Error: ${err.message}`)
+        return of(null)
       }),
     )
   }
 
   getUserBooks(userId: number): Observable<UserBook[]> {
     this.isLoading.set(true)
-    return this.http.get<UserBook[]>(`${this.apiUrl}/userBooks?userId=${userId}`).pipe(
+    console.log("Fetching user books from:", this.userBooksUrl)
+    return this.http.get<UserBook[]>(this.userBooksUrl).pipe(
+      map((userBooks) => userBooks.filter((book) => book.userId === userId)),
       tap((userBooks) => {
+        console.log("Fetched user books:", userBooks)
         this.userBooks.set(userBooks)
         this.isLoading.set(false)
       }),
       catchError((err) => {
-        this.error.set("Failed to load your library. Please try again later.")
+        this.error.set(`Failed to load your library. Error: ${err.message}`)
         this.isLoading.set(false)
         console.error("Error fetching user books:", err)
         return of([])
@@ -98,10 +105,26 @@ export class BookService {
 
   getUserBookDetails(userId: number): Observable<any[]> {
     this.isLoading.set(true)
-    return this.http.get<any[]>(`${this.apiUrl}/userBooks?userId=${userId}&_expand=book`).pipe(
-      tap(() => this.isLoading.set(false)),
+    console.log("Fetching user book details")
+    return this.http.get<UserBook[]>(this.userBooksUrl).pipe(
+      map((userBooks) => userBooks.filter((book) => book.userId === userId)),
+      switchMap((userBooks) => {
+        if (userBooks.length === 0) return of([])
+        return this.http.get<Book[]>(this.apiUrl).pipe(
+          map((books) => {
+            return userBooks.map((userBook) => ({
+              ...userBook,
+              book: books.find((book) => book.id === userBook.bookId),
+            }))
+          }),
+        )
+      }),
+      tap((books) => {
+        console.log("Fetched user book details:", books)
+        this.isLoading.set(false)
+      }),
       catchError((err) => {
-        this.error.set("Failed to load your library details. Please try again later.")
+        this.error.set(`Failed to load your library details. Error: ${err.message}`)
         this.isLoading.set(false)
         console.error("Error fetching user book details:", err)
         return of([])
@@ -110,10 +133,15 @@ export class BookService {
   }
 
   addBookToLibrary(userBook: Omit<UserBook, "id">): Observable<UserBook> {
-    return this.http.post<UserBook>(`${this.apiUrl}/userBooks`, userBook).pipe(
-      tap((newUserBook) => {
-        // Update the signal with the new book
-        this.userBooks.update((books) => [...books, newUserBook])
+    const newUserBook: UserBook = {
+      ...userBook,
+      id: Math.floor(Math.random() * 10000),
+    }
+
+    return of(newUserBook).pipe(
+      delay(500),
+      tap((book) => {
+        this.userBooks.update((books) => [...books, book])
       }),
       catchError((err) => {
         this.error.set("Failed to add book to your library. Please try again.")
@@ -124,44 +152,39 @@ export class BookService {
   }
 
   updateBookStatus(id: number, status: UserBook["status"]): Observable<UserBook> {
-    return this.http
-      .patch<UserBook>(`${this.apiUrl}/userBooks/${id}`, {
-        status,
-      })
-      .pipe(
-        tap((updatedBook) => {
-          // Update the signal with the updated book
-          this.userBooks.update((books) => books.map((book) => (book.id === id ? { ...book, status } : book)))
-        }),
-        catchError((err) => {
-          this.error.set("Failed to update book status. Please try again.")
-          console.error("Error updating book status:", err)
-          throw err
-        }),
-      )
+    return of({ id, status } as UserBook).pipe(
+      delay(500),
+      tap(() => {
+        this.userBooks.update((books) => books.map((book) => (book.id === id ? { ...book, status } : book)))
+      }),
+      catchError((err) => {
+        this.error.set("Failed to update book status. Please try again.")
+        console.error("Error updating book status:", err)
+        throw err
+      }),
+    )
   }
 
-  addReview(id: number, rating: number, review: string): Observable<UserBook> {
+  addReview(id: number, rating: number, review: string): Observable<UserBook | null> {
     const update = {
       rating,
       review,
       dateFinished: new Date().toISOString().split("T")[0],
     }
 
-    return this.http.patch<UserBook>(`${this.apiUrl}/userBooks/${id}`, update).pipe(
-      tap((updatedBook) => {
-        // Update the signal with the updated book
+    return of({ id, ...update } as UserBook).pipe(
+      delay(500),
+      tap(() => {
         this.userBooks.update((books) => books.map((book) => (book.id === id ? { ...book, ...update } : book)))
       }),
       catchError((err) => {
         this.error.set("Failed to save your review. Please try again.")
         console.error("Error adding review:", err)
-        throw err
+        return of(null)
       }),
     )
   }
 
-  // New method to search books
   searchBooks(query: string): Observable<Book[]> {
     if (!query.trim()) {
       return of(this.books())
@@ -178,9 +201,7 @@ export class BookService {
     )
   }
 
-  // Clear error message
   clearError(): void {
     this.error.set(null)
   }
 }
-

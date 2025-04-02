@@ -2,7 +2,7 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { FormsModule } from "@angular/forms"
-import { ActivatedRoute, Router, RouterModule } from "@angular/router"
+import { type ActivatedRoute, type Router, RouterModule } from "@angular/router"
 import { Book, BookService, UserBook } from "../../services/book.service"
 import { ReadingSession, ReadingSessionService } from "../../services/reading-session.service"
 import { BookReviewComponent } from "../book-review/book-review.component"

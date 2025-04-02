@@ -1,6 +1,6 @@
 import { Injectable, signal } from "@angular/core"
 import { HttpClient } from "@angular/common/http"
-import { type Observable, catchError, of, tap } from "rxjs"
+import { type Observable, catchError, of, tap, map } from "rxjs"
 
 export interface ReadingSession {
   id?: number
@@ -15,8 +15,7 @@ export interface ReadingSession {
   providedIn: "root",
 })
 export class ReadingSessionService {
-  private apiUrl = "http://localhost:3000"
-
+  private apiUrl = "/assets/reading-sessions.json"
   isLoading = signal<boolean>(false)
   error = signal<string | null>(null)
 
@@ -24,10 +23,16 @@ export class ReadingSessionService {
 
   getSessionsByUserBookId(userBookId: number): Observable<ReadingSession[]> {
     this.isLoading.set(true)
-    return this.http.get<ReadingSession[]>(`${this.apiUrl}/readingSessions?userBookId=${userBookId}`).pipe(
-      tap(() => this.isLoading.set(false)),
+    console.log(`Fetching reading sessions for userBook ${userBookId} from ${this.apiUrl}`)
+
+    return this.http.get<ReadingSession[]>(this.apiUrl).pipe(
+      map((sessions) => sessions.filter((session) => session.userBookId === userBookId)),
+      tap((sessions) => {
+        console.log(`Found ${sessions.length} sessions for userBook ${userBookId}:`, sessions)
+        this.isLoading.set(false)
+      }),
       catchError((err) => {
-        this.error.set("Failed to load reading sessions. Please try again later.")
+        this.error.set(`Failed to load reading sessions. Error: ${err.message}`)
         this.isLoading.set(false)
         console.error("Error fetching reading sessions:", err)
         return of([])
@@ -37,10 +42,22 @@ export class ReadingSessionService {
 
   addSession(session: Omit<ReadingSession, "id">): Observable<ReadingSession> {
     this.isLoading.set(true)
-    return this.http.post<ReadingSession>(`${this.apiUrl}/readingSessions`, session).pipe(
-      tap(() => this.isLoading.set(false)),
+
+    // Since we can't actually modify the JSON file in a real app scenario,
+    // we'll simulate adding a session
+    const newSession: ReadingSession = {
+      ...session,
+      id: Math.floor(Math.random() * 10000),
+    }
+
+    // In a real app, this would be an HTTP POST request
+    return of(newSession).pipe(
+      tap(() => {
+        console.log("Added new reading session:", newSession)
+        this.isLoading.set(false)
+      }),
       catchError((err) => {
-        this.error.set("Failed to save reading session. Please try again.")
+        this.error.set(`Failed to save reading session. Error: ${err.message}`)
         this.isLoading.set(false)
         console.error("Error adding reading session:", err)
         throw err
@@ -50,12 +67,33 @@ export class ReadingSessionService {
 
   getUserReadingStats(userId: number): Observable<any> {
     this.isLoading.set(true)
-    return this.http.get<any>(`${this.apiUrl}/readingSessions?userId=${userId}`).pipe(
-      tap(() => this.isLoading.set(false)),
-      catchError((err) => {
-        this.error.set("Failed to load reading statistics. Please try again later.")
+    console.log(`Fetching reading stats for user ${userId}`)
+
+    // In a real app, this would be a dedicated endpoint
+    // Here we'll calculate stats from the sessions data
+    return this.http.get<ReadingSession[]>(this.apiUrl).pipe(
+      map((sessions) => {
+        // Calculate some basic stats
+        const totalPagesRead = sessions.reduce((sum, session) => sum + session.pagesRead, 0)
+        const totalReadingTime = sessions.reduce((sum, session) => sum + session.minutes, 0)
+        const totalSessions = sessions.length
+
+        return {
+          totalSessions,
+          totalPagesRead,
+          totalReadingTime,
+          averagePagesPerSession: totalSessions ? Math.round(totalPagesRead / totalSessions) : 0,
+          averageTimePerSession: totalSessions ? Math.round(totalReadingTime / totalSessions) : 0,
+        }
+      }),
+      tap((stats) => {
+        console.log("Calculated reading stats:", stats)
         this.isLoading.set(false)
-        console.error("Error fetching reading stats:", err)
+      }),
+      catchError((err) => {
+        this.error.set(`Failed to load reading statistics. Error: ${err.message}`)
+        this.isLoading.set(false)
+        console.error("Error calculating reading stats:", err)
         return of({})
       }),
     )
