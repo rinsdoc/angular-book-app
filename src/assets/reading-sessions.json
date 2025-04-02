@@ -1,0 +1,67 @@
+[
+  {
+    "id": 1,
+    "userBookId": 1,
+    "date": "2023-01-20",
+    "pagesRead": 50,
+    "minutes": 60,
+    "notes": "Really enjoying the magical realism elements."
+  },
+  {
+    "id": 2,
+    "userBookId": 1,
+    "date": "2023-01-25",
+    "pagesRead": 100,
+    "minutes": 120,
+    "notes": "The Buendía family is fascinating."
+  },
+  {
+    "id": 3,
+    "userBookId": 1,
+    "date": "2023-02-05",
+    "pagesRead": 417,
+    "minutes": 180,
+    "notes": "Finished the book. What an incredible journey!"
+  },
+  {
+    "id": 4,
+    "userBookId": 2,
+    "date": "2023-03-10",
+    "pagesRead": 150,
+    "minutes": 90,
+    "notes": "The dystopian world is chilling."
+  },
+  {
+    "id": 5,
+    "userBookId": 2,
+    "date": "2023-03-18",
+    "pagesRead": 328,
+    "minutes": 120,
+    "notes": "Finished. A powerful warning about totalitarianism."
+  },
+  {
+    "id": 6,
+    "userBookId": 3,
+    "date": "2023-04-15",
+    "pagesRead": 100,
+    "minutes": 75,
+    "notes": "Bilbo's adventure is just beginning!"
+  },
+  {
+    "id": 7,
+    "userBookId": 5,
+    "date": "2023-05-20",
+    "pagesRead": 150,
+    "minutes": 90,
+    "notes": "Scout is such a compelling narrator."
+  },
+  {
+    "id": 8,
+    "userBookId": 5,
+    "date": "2023-05-30",
+    "pagesRead": 324,
+    "minutes": 120,
+    "notes": "The trial scenes are powerful and moving."
+  }
+]
+

@@ -1,0 +1,48 @@
+[
+  {
+    "id": 1,
+    "userBookId": 1,
+    "bookId": 1,
+    "username": "LiteraryFan",
+    "rating": 5,
+    "reviewText": "This book changed my perspective on literature. The magical realism is masterfully executed.",
+    "date": "2023-02-15"
+  },
+  {
+    "id": 2,
+    "userBookId": 2,
+    "bookId": 1,
+    "username": "BookwormJane",
+    "rating": 4,
+    "reviewText": "A classic that deserves all the praise it gets. The family saga is complex but rewarding.",
+    "date": "2023-03-10"
+  },
+  {
+    "id": 3,
+    "userBookId": 3,
+    "bookId": 2,
+    "username": "DystopiaReader",
+    "rating": 5,
+    "reviewText": "Orwell's vision of the future remains chillingly relevant. A must-read for everyone.",
+    "date": "2023-01-20"
+  },
+  {
+    "id": 4,
+    "userBookId": 4,
+    "bookId": 3,
+    "username": "FantasyLover",
+    "rating": 5,
+    "reviewText": "The perfect introduction to Tolkien's world. Charming, adventurous, and timeless.",
+    "date": "2023-04-05"
+  },
+  {
+    "id": 5,
+    "userBookId": 5,
+    "bookId": 7,
+    "username": "ClassicsFan",
+    "rating": 5,
+    "reviewText": "Harper Lee's masterpiece tackles complex social issues with grace and humanity.",
+    "date": "2023-06-12"
+  }
+]
+
