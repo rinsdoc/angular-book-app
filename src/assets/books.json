@@ -1,0 +1,90 @@
+[
+  {
+    "id": 1,
+    "title": "Cien años de soledad",
+    "author": "Gabriel García Márquez",
+    "cover": "https://covers.openlibrary.org/b/id/8478025-L.jpg",
+    "description": "Una novela que narra la historia de la familia Buendía a lo largo de siete generaciones en el pueblo ficticio de Macondo.",
+    "published": "1967-05-30",
+    "genres": ["Realismo mágico", "Ficción literaria", "Literatura latinoamericana"],
+    "pages": 417,
+    "avgRating": 4.7
+  },
+  {
+    "id": 2,
+    "title": "1984",
+    "author": "George Orwell",
+    "cover": "https://covers.openlibrary.org/b/id/8575741-L.jpg",
+    "description": "Una distopía que retrata un futuro totalitario donde el gobierno controla cada aspecto de la vida de las personas.",
+    "published": "1949-06-08",
+    "genres": ["Distopía", "Ciencia ficción", "Ficción política"],
+    "pages": 328,
+    "avgRating": 4.5
+  },
+  {
+    "id": 3,
+    "title": "El hobbit",
+    "author": "J.R.R. Tolkien",
+    "cover": "https://covers.openlibrary.org/b/id/8323742-L.jpg",
+    "description": "La aventura de Bilbo Bolsón, quien emprende un viaje inesperado para ayudar a un grupo de enanos a recuperar su tesoro.",
+    "published": "1937-09-21",
+    "genres": ["Fantasía", "Aventura", "Literatura juvenil"],
+    "pages": 310,
+    "avgRating": 4.6
+  },
+  {
+    "id": 4,
+    "title": "Orgullo y prejuicio",
+    "author": "Jane Austen",
+    "cover": "https://covers.openlibrary.org/b/id/8479576-L.jpg",
+    "description": "La historia de Elizabeth Bennet y su complicada relación con el orgulloso señor Darcy en la Inglaterra del siglo XIX.",
+    "published": "1813-01-28",
+    "genres": ["Romance", "Ficción histórica", "Clásico"],
+    "pages": 432,
+    "avgRating": 4.5
+  },
+  {
+    "id": 5,
+    "title": "Don Quijote de la Mancha",
+    "author": "Miguel de Cervantes",
+    "cover": "https://covers.openlibrary.org/b/id/7353451-L.jpg",
+    "description": "Las aventuras de un hidalgo que pierde la cordura por leer demasiados libros de caballería y decide convertirse en caballero andante.",
+    "published": "1605-01-16",
+    "genres": ["Clásico", "Sátira", "Aventura"],
+    "pages": 863,
+    "avgRating": 4.3
+  },
+  {
+    "id": 6,
+    "title": "Harry Potter y la piedra filosofal",
+    "author": "J.K. Rowling",
+    "cover": "https://covers.openlibrary.org/b/id/10110415-L.jpg",
+    "description": "El primer año de Harry Potter en la Escuela Hogwarts de Magia y Hechicería, donde descubre su verdadera identidad y enfrenta peligros inesperados.",
+    "published": "1997-06-26",
+    "genres": ["Fantasía", "Literatura juvenil", "Aventura"],
+    "pages": 309,
+    "avgRating": 4.8
+  },
+  {
+    "id": 7,
+    "title": "Matar a un ruiseñor",
+    "author": "Harper Lee",
+    "cover": "https://covers.openlibrary.org/b/id/8412125-L.jpg",
+    "description": "Una historia sobre justicia e injusticia racial en el sur de Estados Unidos durante los años 1930, contada a través de los ojos de una niña.",
+    "published": "1960-07-11",
+    "genres": ["Ficción histórica", "Drama legal", "Literatura estadounidense"],
+    "pages": 324,
+    "avgRating": 4.6
+  },
+  {
+    "id": 8,
+    "title": "El Gran Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "cover": "https://covers.openlibrary.org/b/id/12469510-L.jpg",
+    "description": "Una novela que explora los excesos de la era del jazz en América a través de la historia del enigmático millonario Jay Gatsby.",
+    "published": "1925-04-10",
+    "genres": ["Ficción literaria", "Drama", "Clásico"],
+    "pages": 218,
+    "avgRating": 4.3
+  }
+]
