@@ -3,6 +3,8 @@ import { Component, type OnInit, type AfterViewInit, type ElementRef, ViewChild 
 import { CommonModule } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
 import { forkJoin } from "rxjs"
+import { BookService } from "../../services/book.service"
+import { ReadingSessionService } from "../../services/reading-session.service"
 
 @Component({
   selector: "app-reading-stats",
@@ -38,7 +40,11 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
     "#e040fb",
   ]
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private bookService: BookService,
+    private readingSessionService: ReadingSessionService,
+  ) {}
 
   ngOnInit(): void {
     this.loadReadingStats()
@@ -50,15 +56,16 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
 
   loadReadingStats(): void {
     this.isLoading = true
-    const apiUrl = "http://localhost:3000" // JSON Server URL
 
-    // Get all the data we need
-    const userBooks$ = this.http.get<any[]>(`${apiUrl}/userBooks?userId=${this.currentUserId}`)
-    const books$ = this.http.get<any[]>(`${apiUrl}/books`)
-    const sessions$ = this.http.get<any[]>(`${apiUrl}/readingSessions`)
+    // Get user books and all books
+    const userBooks$ = this.bookService.getUserBooks(this.currentUserId)
+    const books$ = this.bookService.getAllBooks()
+    const sessions$ = this.http.get<any[]>("/assets/reading-sessions.json")
 
     forkJoin([userBooks$, books$, sessions$]).subscribe({
       next: ([userBooks, books, sessions]) => {
+        console.log("Loaded data for stats:", { userBooks, books, sessions })
+
         // Books read count
         this.totalBooksRead = userBooks.filter((ub) => ub.status === "read").length
 
@@ -122,12 +129,9 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
 
   getBestReadingMonth() {
     if (!this.monthlyProgress || this.monthlyProgress.length === 0) {
-      return { month: 'No data available', books: 0 };
+      return { month: "No data available", books: 0 }
     }
-    return this.monthlyProgress.reduce((max, month) =>
-      month.books > max.books ? month : max,
-      { month: '', books: 0 }
-    );
+    return this.monthlyProgress.reduce((max, month) => (month.books > max.books ? month : max), { month: "", books: 0 })
   }
 
   initGenreChart(): void {
@@ -149,7 +153,7 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
     const maxBarWidth = canvasWidth - 150 // Leave space for labels
 
     // Find the maximum value for scaling
-    const maxValue = Math.max(...topGenres.map((g) => g.value))
+    const maxValue = Math.max(...topGenres.map((g) => g.value), 1)
 
     // Draw bars
     topGenres.forEach((genre, index) => {
@@ -196,18 +200,17 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
     const maxBarHeight = canvasHeight - 60 // Leave space for labels
 
     // Find the maximum value for scaling
-    const maxBooks = Math.max(...this.monthlyProgress.map((m) => m.books))
-    const maxBooks_scaled = maxBooks === 0 ? 1 : maxBooks // Avoid division by zero
+    const maxBooks = Math.max(...this.monthlyProgress.map((m) => m.books), 1)
 
     // Draw bars
     this.monthlyProgress.forEach((month, index) => {
       const x = index * barWidth + 40
-      const barHeight = (month.books / maxBooks_scaled) * maxBarHeight
+      const barHeight = (month.books / maxBooks) * maxBarHeight
       const y = canvasHeight - barHeight - 30
 
       // Draw bar
       ctx.fillStyle = this.chartColors[index % this.chartColors.length]
-      ctx.fillRect(x, y, barWidth - 10, barHeight)
+      ctx.fillRect(x, y, barWidth - 10, barHeight || 1) // Ensure at least 1px height for empty months
 
       // Draw month name
       ctx.fillStyle = "#666"
