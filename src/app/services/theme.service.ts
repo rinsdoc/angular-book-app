@@ -34,8 +34,10 @@ export class ThemeService {
     // Apply theme to document
     if (theme === "dark") {
       document.documentElement.classList.add("dark-theme")
+      document.documentElement.classList.add("dark") // Add Tailwind dark class
     } else {
       document.documentElement.classList.remove("dark-theme")
+      document.documentElement.classList.remove("dark") // Remove Tailwind dark class
     }
   }
 
