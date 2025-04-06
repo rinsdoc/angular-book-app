@@ -1,5 +1,5 @@
 // reading-stats.component.ts
-import { Component, type OnInit, type AfterViewInit, type ElementRef, ViewChild } from "@angular/core"
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
 import { forkJoin } from "rxjs"
@@ -108,7 +108,8 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
         userBooks
           .filter((ub) => ub.dateFinished && ub.dateFinished.startsWith("2023"))
           .forEach((ub) => {
-            const monthIndex = new Date(ub.dateFinished).getMonth()
+            // Since we've already filtered for ub.dateFinished being truthy, we can safely assert it's not undefined
+            const monthIndex = new Date(ub.dateFinished!).getMonth()
             this.monthlyProgress[monthIndex].books += 1
           })
 
@@ -228,4 +229,3 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
     })
   }
 }
-

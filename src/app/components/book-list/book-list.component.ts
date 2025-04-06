@@ -1,9 +1,10 @@
 // book-list.component.ts
-import { Component, type OnInit } from "@angular/core"
+import { Component, OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { FormsModule } from "@angular/forms"
 import { RouterModule } from "@angular/router"
-import { Book, BookService } from "../../services/book.service"
+import { BookService } from "../../services/book.service"
+import { Book } from "../../services/book.service"
 
 @Component({
   selector: "app-book-list",

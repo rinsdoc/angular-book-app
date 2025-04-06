@@ -1,38 +1,48 @@
-<div class="community-reviews">
-    <h2>Community Reviews</h2>
-    
-    <div *ngIf="isLoading" class="loading-reviews">
-      <div class="loading-spinner"></div>
-      <p>Loading reviews...</p>
+<div class="mt-12">
+  <h2 class="text-xl font-semibold mb-6 pb-2 border-b border-primary/20 relative">
+    Community Reviews
+    <span class="absolute bottom-0 left-0 w-12 h-0.5 bg-primary"></span>
+  </h2>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-8">
+    <div class="w-10 h-10 border-4 border-primary/10 border-t-primary rounded-full animate-spin mb-4"></div>
+    <p class="text-text-secondary-light dark:text-text-secondary-dark">Loading reviews...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 p-4 rounded-lg mb-6">
+    {{ error }}
+  </div>
+
+  <!-- Reviews Content -->
+  <div *ngIf="!isLoading && !error">
+    <!-- No Reviews -->
+    <div *ngIf="reviews.length === 0" class="bg-primary/5 p-8 rounded-lg text-center text-text-secondary-light dark:text-text-secondary-dark">
+      <p>No reviews yet. Be the first to review this book!</p>
     </div>
-    
-    <div *ngIf="error" class="error-message">
-      {{ error }}
-    </div>
-    
-    <div *ngIf="!isLoading && !error">
-      <div *ngIf="reviews.length === 0" class="no-reviews">
-        <p>No reviews yet. Be the first to review this book!</p>
-      </div>
-      
-      <div *ngIf="reviews.length > 0" class="reviews-list">
-        <div class="review-card" *ngFor="let review of reviews">
-          <div class="review-header">
-            <div class="reviewer-info">
-              <span class="reviewer-name">{{ review.username }}</span>
-              <span class="review-date">{{ review.date | date:'mediumDate' }}</span>
-            </div>
-            <div class="review-rating">
-              <span class="stars">{{ getStarRating(review.rating) }}</span>
-            </div>
+
+    <!-- Reviews List -->
+    <div *ngIf="reviews.length > 0" class="space-y-6">
+      <div
+        *ngFor="let review of reviews"
+        class="bg-primary/5 rounded-lg p-6 transition-all hover:bg-primary/10"
+      >
+        <div class="flex justify-between mb-4">
+          <div>
+            <span class="font-semibold text-text-primary-light dark:text-text-primary-dark block">{{ review.username }}</span>
+            <span class="text-sm text-text-secondary-light dark:text-text-secondary-dark">{{ review.date | date:'mediumDate' }}</span>
           </div>
-          
-          <div class="review-content">
-            <p>{{ review.reviewText }}</p>
+          <div class="text-amber-500 text-xl tracking-wider">
+            {{ getStarRating(review.rating) }}
           </div>
+        </div>
+
+        <div class="text-text-primary-light dark:text-text-primary-dark leading-relaxed">
+          <p>{{ review.reviewText }}</p>
         </div>
       </div>
     </div>
   </div>
-  
-  
+</div>
+

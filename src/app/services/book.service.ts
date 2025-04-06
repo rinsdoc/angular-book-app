@@ -1,5 +1,5 @@
 import { Injectable, signal } from "@angular/core"
-import type { HttpClient } from "@angular/common/http"
+import { HttpClient } from "@angular/common/http"
 import { type Observable, tap, catchError, of, map, delay, switchMap } from "rxjs"
 
 // Book interfaces

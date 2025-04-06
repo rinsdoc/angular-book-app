@@ -1,25 +1,41 @@
-<div class="book-detail-container" *ngIf="book; else loading">
-    <div class="book-header">
-      <button class="back-button" (click)="goBack()">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+  <div *ngIf="book; else loading">
+    <!-- Book Header -->
+    <div class="flex items-center mb-10 relative">
+      <button
+        class="bg-transparent text-primary hover:bg-primary/10 p-2 mr-4 rounded-full w-10 h-10 flex items-center justify-center transition-all hover:-translate-x-1"
+        (click)="goBack()">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M19 12H5M12 19l-7-7 7-7"/>
         </svg>
       </button>
-      <div class="book-title">
-        <h1>{{ book.title }}</h1>
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent">
+          {{ book.title }}
+        </h1>
       </div>
     </div>
-    
-    <div class="book-content">
-      <div class="book-cover-section">
-        <div class="book-cover-container">
-          <img [src]="book.cover" [alt]="book.title" />
+
+    <!-- Book Content -->
+    <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 md:gap-12">
+      <!-- Book Cover Section -->
+      <div>
+        <div class="relative overflow-hidden rounded-xl shadow-lg transition-all hover:-translate-y-1 hover:rotate-1 hover:shadow-xl">
+          <div class="relative w-full max-w-[300px] mx-auto">
+            <img
+              [src]="book.cover"
+              [alt]="book.title"
+              class="w-full h-auto object-cover"
+            />
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/70 opacity-60 transition-opacity hover:opacity-30"></div>
+          </div>
         </div>
-        
-        <div class="book-actions">
-          <select 
-            class="book-status-select" 
-            [ngModel]="userBook?.status" 
+
+        <!-- Book Actions -->
+        <div class="mt-6 space-y-3">
+          <select
+            class="w-full p-3 rounded-lg border border-primary/30 bg-card-light dark:bg-card-dark text-text-primary-light dark:text-text-primary-dark focus:border-primary focus:ring focus:ring-primary/20 transition-all"
+            [ngModel]="userBook?.status"
             (ngModelChange)="updateBookStatus($event)"
           >
             <option value="">Add to My Books</option>
@@ -27,122 +43,177 @@
             <option value="currently-reading">Currently Reading</option>
             <option value="read">Read</option>
           </select>
-          
-          <button 
-            class="action-button start-reading" 
+
+          <button
             *ngIf="userBook?.status === 'want-to-read'"
             (click)="updateBookStatus('currently-reading')"
+            class="w-full py-3 bg-primary hover:bg-primary-light text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 hover:shadow-md"
           >
             Start Reading
           </button>
-          
-          <button 
-            class="action-button track-progress" 
+
+          <button
             *ngIf="userBook?.status === 'currently-reading'"
             (click)="openProgressTracker()"
+            class="w-full py-3 bg-primary hover:bg-primary-light text-white font-medium rounded-lg transition-all flex items-center justify-center gap-2 hover:-translate-y-0.5 hover:shadow-md"
           >
             Track Progress
           </button>
         </div>
       </div>
-      
-      <div class="book-info-container">
-        <div class="book-author">by {{ book.author }}</div>
-        
-        <div class="book-meta-info">
-          <div class="meta-item">
-            <div class="meta-label">Published</div>
-            <div class="meta-value">{{ book.published | date:'mediumDate' }}</div>
+
+      <!-- Book Info Container -->
+      <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 sm:p-10 shadow-card dark:shadow-card-dark relative overflow-hidden">
+        <!-- Top gradient bar -->
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary-light"></div>
+
+        <!-- Author -->
+        <div class="text-xl sm:text-2xl text-text-secondary-light dark:text-text-secondary-dark font-medium mb-8">
+          by {{ book.author }}
+        </div>
+
+        <!-- Book Meta Info -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10 bg-primary/5 p-6 rounded-lg border-l-4 border-primary">
+          <div class="text-center transition-transform hover:-translate-y-1">
+            <div class="text-sm text-text-secondary-light dark:text-text-secondary-dark uppercase tracking-wider mb-2">Published</div>
+            <div class="text-lg font-semibold text-primary">{{ book.published | date:'mediumDate' }}</div>
           </div>
-          
-          <div class="meta-item">
-            <div class="meta-label">Pages</div>
-            <div class="meta-value">{{ book.pages }}</div>
+
+          <div class="text-center transition-transform hover:-translate-y-1">
+            <div class="text-sm text-text-secondary-light dark:text-text-secondary-dark uppercase tracking-wider mb-2">Pages</div>
+            <div class="text-lg font-semibold text-primary">{{ book.pages }}</div>
           </div>
-          
-          <div class="meta-item">
-            <div class="meta-label">Rating</div>
-            <div class="meta-value">{{ book.avgRating.toFixed(1) }} ★</div>
+
+          <div class="text-center transition-transform hover:-translate-y-1">
+            <div class="text-sm text-text-secondary-light dark:text-text-secondary-dark uppercase tracking-wider mb-2">Rating</div>
+            <div class="text-lg font-semibold text-primary">{{ book.avgRating.toFixed(1) }} ★</div>
           </div>
         </div>
-        
-        <div class="book-description">
+
+        <!-- Book Description -->
+        <div class="mb-10 leading-relaxed text-text-primary-light dark:text-text-primary-dark border-l-2 border-primary/20 pl-4">
           <p>{{ book.description }}</p>
         </div>
-        
-        <div class="book-genres">
-          <span class="genre-tag" *ngFor="let genre of book.genres">{{ genre }}</span>
+
+        <!-- Book Genres -->
+        <div class="flex flex-wrap gap-3 mb-10">
+          <span
+            *ngFor="let genre of book.genres"
+            class="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium transition-all hover:-translate-y-0.5 hover:bg-primary/20"
+          >
+            {{ genre }}
+          </span>
         </div>
-        
-        <div class="reviews-section" *ngIf="userBook?.status === 'read'">
-          <h2>Your Review</h2>
-          
-          <div class="review-form">
-            <div class="rating-selector">
-              <p>Your Rating:</p>
-              <div class="rating-stars">
-                <span 
-                  class="star" 
-                  *ngFor="let star of [1, 2, 3, 4, 5]" 
-                  [class.filled]="star <= userRating"
+
+        <!-- Reviews Section -->
+        <div *ngIf="userBook?.status === 'read'" class="mt-12">
+          <h2 class="text-xl font-semibold mb-6 pb-2 border-b border-primary/20 relative">
+            Your Review
+            <span class="absolute bottom-0 left-0 w-12 h-0.5 bg-primary"></span>
+          </h2>
+
+          <div class="bg-card-light dark:bg-card-dark rounded-lg p-6 border border-primary/10 shadow-sm">
+            <div class="mb-6">
+              <p class="font-medium mb-2">Your Rating:</p>
+              <div class="flex gap-1">
+                <span
+                  *ngFor="let star of [1, 2, 3, 4, 5]"
+                  [class.text-amber-400]="star <= userRating"
+                  [class.text-gray-300]="star > userRating"
                   (click)="setRating(star)"
+                  class="text-2xl cursor-pointer transition-transform hover:scale-110"
                 >★</span>
               </div>
             </div>
-            
-            <textarea 
-              class="review-textarea" 
-              [(ngModel)]="userReview" 
+
+            <textarea
+              [(ngModel)]="userReview"
               placeholder="Write your review here..."
+              class="w-full min-h-[120px] p-4 rounded-lg border border-primary/20 bg-card-light dark:bg-card-dark text-text-primary-light dark:text-text-primary-dark focus:border-primary focus:ring focus:ring-primary/20 transition-all resize-y"
             ></textarea>
-            
-            <button class="review-submit" (click)="submitReview()">Submit Review</button>
+
+            <button
+              (click)="submitReview()"
+              class="mt-6 py-3 px-6 bg-primary hover:bg-primary-light text-white font-medium rounded-lg transition-all hover:-translate-y-0.5 hover:shadow-md"
+            >
+              Submit Review
+            </button>
           </div>
         </div>
-        
+
         <app-book-review *ngIf="book.id" [bookId]="book.id"></app-book-review>
       </div>
     </div>
   </div>
-  
+
+  <!-- Loading State -->
   <ng-template #loading>
-    <div class="loading-container">
-      <div class="loading-spinner"></div>
-      <p>Loading book details...</p>
+    <div class="flex flex-col items-center justify-center min-h-[400px]">
+      <div class="w-16 h-16 border-4 border-primary/10 border-t-primary rounded-full animate-spin mb-6"></div>
+      <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg">Loading book details...</p>
     </div>
   </ng-template>
-  
-  <div *ngIf="progressTrackerOpen" class="progress-tracker-modal">
-    <div class="modal-content">
-      <h3>Track Your Reading Progress</h3>
-      <button class="close-modal" (click)="closeProgressTracker()">×</button>
-      
-      <div class="progress-form">
-        <div class="form-group">
-          <label for="current-page">Current Page</label>
-          <input type="number" id="current-page" [(ngModel)]="currentPage" min="1" [max]="book?.pages || 1000">
+
+  <!-- Progress Tracker Modal -->
+  <div *ngIf="progressTrackerOpen" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
+    <div class="bg-card-light dark:bg-card-dark rounded-xl p-10 w-11/12 max-w-lg relative shadow-xl animate-slideUp">
+      <h3 class="text-xl font-semibold text-primary mb-6">Track Your Reading Progress</h3>
+      <button
+        (click)="closeProgressTracker()"
+        class="absolute top-4 right-4 text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark text-2xl w-8 h-8 flex items-center justify-center transition-transform hover:rotate-90"
+      >×</button>
+
+      <div class="mt-6">
+        <div class="mb-6">
+          <label for="current-page" class="block mb-2 font-medium">Current Page</label>
+          <input
+            type="number"
+            id="current-page"
+            [(ngModel)]="currentPage"
+            min="1"
+            [max]="book?.pages || 1000"
+            class="w-full p-3 rounded-lg border border-primary/30 bg-card-light dark:bg-card-dark text-text-primary-light dark:text-text-primary-dark focus:border-primary focus:ring focus:ring-primary/20"
+          >
         </div>
-        
-        <div class="form-group">
-          <label for="minutes-read">Minutes Read</label>
-          <input type="number" id="minutes-read" [(ngModel)]="minutesRead" min="1">
+
+        <div class="mb-6">
+          <label for="minutes-read" class="block mb-2 font-medium">Minutes Read</label>
+          <input
+            type="number"
+            id="minutes-read"
+            [(ngModel)]="minutesRead"
+            min="1"
+            class="w-full p-3 rounded-lg border border-primary/30 bg-card-light dark:bg-card-dark text-text-primary-light dark:text-text-primary-dark focus:border-primary focus:ring focus:ring-primary/20"
+          >
         </div>
-        
-        <div class="form-group">
-          <label for="reading-notes">Notes (optional)</label>
-          <textarea id="reading-notes" [(ngModel)]="readingNotes"></textarea>
+
+        <div class="mb-6">
+          <label for="reading-notes" class="block mb-2 font-medium">Notes (optional)</label>
+          <textarea
+            id="reading-notes"
+            [(ngModel)]="readingNotes"
+            class="w-full min-h-[100px] p-3 rounded-lg border border-primary/30 bg-card-light dark:bg-card-dark text-text-primary-light dark:text-text-primary-dark focus:border-primary focus:ring focus:ring-primary/20 resize-y"
+          ></textarea>
         </div>
-        
-        <div class="progress-stats" *ngIf="book">
-          <p>Progress: {{ (currentPage / book.pages * 100).toFixed(0) }}%</p>
-          <div class="progress-bar">
-            <div class="progress-fill" [style.width.%]="(currentPage / book.pages * 100)"></div>
+
+        <div *ngIf="book" class="my-6 p-4 bg-primary/5 rounded-lg">
+          <p class="font-medium text-primary mb-2">Progress: {{ (currentPage / book.pages * 100).toFixed(0) }}%</p>
+          <div class="h-2.5 bg-primary/10 rounded-full overflow-hidden">
+            <div
+              class="h-full bg-primary transition-all duration-500"
+              [style.width.%]="(currentPage / book.pages * 100)"
+            ></div>
           </div>
         </div>
-        
-        <button class="save-progress" (click)="saveReadingProgress()">Save Progress</button>
+
+        <button
+          (click)="saveReadingProgress()"
+          class="w-full py-3 bg-primary hover:bg-primary-light text-white font-medium rounded-lg transition-all hover:-translate-y-0.5 hover:shadow-md"
+        >
+          Save Progress
+        </button>
       </div>
     </div>
   </div>
-  
-  
+</div>
+

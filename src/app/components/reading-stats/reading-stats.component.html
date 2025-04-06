@@ -1,61 +1,88 @@
-<!-- reading-stats.component.html -->
-<div class="stats-container">
-  <h2>Reading Statistics</h2>
-  
-  <div *ngIf="isLoading" class="loading-container">
-    <div class="loading-spinner"></div>
-    <p>Analyzing your reading data...</p>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+  <h2 class="text-2xl sm:text-3xl font-bold mb-8 pb-2 relative">
+    Reading Statistics
+    <span class="absolute bottom-0 left-0 w-16 h-1 bg-gradient-to-r from-primary to-primary-light"></span>
+  </h2>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex flex-col items-center justify-center min-h-[400px]">
+    <div class="w-16 h-16 border-4 border-primary/10 border-t-primary rounded-full animate-spin mb-6"></div>
+    <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg">Analyzing your reading data...</p>
   </div>
-  
+
   <ng-container *ngIf="!isLoading">
-    <div class="stats-summary">
-      <div class="stat-card">
-        <div class="stat-icon">📚</div>
-        <h3>{{ totalBooksRead }}</h3>
-        <p>Books Read</p>
+    <!-- Stats Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      <!-- Books Read Card -->
+      <div class="bg-card-light dark:bg-card-dark rounded-xl p-8 text-center shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary-light"></div>
+        <div class="text-4xl mb-4">📚</div>
+        <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-2">
+          {{ totalBooksRead }}
+        </h3>
+        <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg font-medium">Books Read</p>
       </div>
-      
-      <div class="stat-card">
-        <div class="stat-icon">📄</div>
-        <h3>{{ pagesReadThisYear }}</h3>
-        <p>Pages This Year</p>
+
+      <!-- Pages Read Card -->
+      <div class="bg-card-light dark:bg-card-dark rounded-xl p-8 text-center shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary-light"></div>
+        <div class="text-4xl mb-4">📄</div>
+        <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-2">
+          {{ pagesReadThisYear }}
+        </h3>
+        <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg font-medium">Pages This Year</p>
       </div>
-      
-      <div class="stat-card">
-        <div class="stat-icon">⏱️</div>
-        <h3>{{ (readingTimeThisYear / 60).toFixed(1) }}</h3>
-        <p>Hours Reading</p>
+
+      <!-- Reading Time Card -->
+      <div class="bg-card-light dark:bg-card-dark rounded-xl p-8 text-center shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary-light"></div>
+        <div class="text-4xl mb-4">⏱️</div>
+        <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-2">
+          {{ (readingTimeThisYear / 60).toFixed(1) }}
+        </h3>
+        <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg font-medium">Hours Reading</p>
       </div>
     </div>
-    
-    <div class="stats-charts">
-      <div class="chart genre-chart">
-        <h3>Genres Read</h3>
-        <div class="chart-container">
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+      <!-- Genre Chart -->
+      <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark">
+        <h3 class="text-xl font-semibold mb-6 text-center pb-2 relative">
+          Genres Read
+          <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-10 h-0.5 bg-primary"></span>
+        </h3>
+        <div class="relative h-[300px] flex justify-center">
           <canvas #genreCanvas width="500" height="300"></canvas>
-          
+
           <!-- Fallback for browsers without canvas support -->
-          <div class="fallback-chart" *ngIf="genreDistribution.length > 0">
-            <div *ngFor="let genre of genreDistribution.slice(0, 5)" class="genre-bar">
-              <span class="genre-name">{{ genre.name }}</span>
-              <div class="bar" [style.width.%]="(genre.value / totalBooksRead) * 100">
+          <div class="hidden w-full" *ngIf="genreDistribution.length > 0">
+            <div *ngFor="let genre of genreDistribution.slice(0, 5)" class="flex items-center mb-4">
+              <span class="w-24 text-sm text-text-secondary-light dark:text-text-secondary-dark">{{ genre.name }}</span>
+              <div class="h-6 bg-gradient-to-r from-primary to-primary-light rounded-full flex items-center justify-end px-3 text-white text-xs font-medium min-w-[30px] transition-all duration-1000 flex-1"
+                   [style.width.%]="(genre.value / totalBooksRead) * 100">
                 {{ genre.value }}
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-      <div class="chart monthly-chart">
-        <h3>Monthly Progress</h3>
-        <div class="chart-container">
+
+      <!-- Monthly Progress Chart -->
+      <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark">
+        <h3 class="text-xl font-semibold mb-6 text-center pb-2 relative">
+          Monthly Progress
+          <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-10 h-0.5 bg-primary"></span>
+        </h3>
+        <div class="relative h-[300px] flex justify-center">
           <canvas #monthlyCanvas width="500" height="300"></canvas>
-          
+
           <!-- Fallback for browsers without canvas support -->
-          <div class="fallback-chart">
-            <div *ngFor="let month of monthlyProgress" class="month-bar">
-              <span class="month-name">{{ month.month }}</span>
-              <div class="bar" [style.width.%]="(month.books / 5) * 100">
+          <div class="hidden w-full">
+            <div *ngFor="let month of monthlyProgress" class="flex items-center mb-4">
+              <span class="w-24 text-sm text-text-secondary-light dark:text-text-secondary-dark">{{ month.month }}</span>
+              <div class="h-6 bg-gradient-to-r from-primary to-primary-light rounded-full flex items-center justify-end px-3 text-white text-xs font-medium min-w-[30px] transition-all duration-1000 flex-1"
+                   [style.width.%]="(month.books / 5) * 100">
                 {{ month.books }} books
               </div>
             </div>
@@ -63,47 +90,72 @@
         </div>
       </div>
     </div>
-    
-    <div class="reading-insights">
-      <h3>Reading Insights</h3>
-      <div class="insights-grid">
-        <div class="insight-card">
-          <h4>Most Read Genre</h4>
-          <p *ngIf="genreDistribution.length > 0">
+
+    <!-- Reading Insights Section -->
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold mb-6 pb-2 relative">
+        Reading Insights
+        <span class="absolute bottom-0 left-0 w-10 h-0.5 bg-primary"></span>
+      </h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Most Read Genre -->
+        <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1">
+          <h4 class="text-lg font-medium mb-4 text-text-primary-light dark:text-text-primary-dark">Most Read Genre</h4>
+          <p *ngIf="genreDistribution.length > 0" class="text-primary text-xl font-semibold">
             {{ genreDistribution[0].name }}
-            <span class="insight-value">{{ genreDistribution[0].value }} books</span>
+            <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
+              {{ genreDistribution[0].value }} books
+            </span>
           </p>
-          <p *ngIf="genreDistribution.length === 0">No data available</p>
+          <p *ngIf="genreDistribution.length === 0" class="text-text-secondary-light dark:text-text-secondary-dark">
+            No data available
+          </p>
         </div>
-        
-        <div class="insight-card">
-          <h4>Average Reading Time</h4>
-          <p *ngIf="totalBooksRead > 0">
+
+        <!-- Average Reading Time -->
+        <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1">
+          <h4 class="text-lg font-medium mb-4 text-text-primary-light dark:text-text-primary-dark">Average Reading Time</h4>
+          <p *ngIf="totalBooksRead > 0" class="text-primary text-xl font-semibold">
             {{ (readingTimeThisYear / totalBooksRead / 60).toFixed(1) }}
-            <span class="insight-value">hours per book</span>
+            <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
+              hours per book
+            </span>
           </p>
-          <p *ngIf="totalBooksRead === 0">No data available</p>
+          <p *ngIf="totalBooksRead === 0" class="text-text-secondary-light dark:text-text-secondary-dark">
+            No data available
+          </p>
         </div>
-        
-        <div class="insight-card">
-          <h4>Reading Pace</h4>
-          <p *ngIf="readingTimeThisYear > 0">
+
+        <!-- Reading Pace -->
+        <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1">
+          <h4 class="text-lg font-medium mb-4 text-text-primary-light dark:text-text-primary-dark">Reading Pace</h4>
+          <p *ngIf="readingTimeThisYear > 0" class="text-primary text-xl font-semibold">
             {{ (pagesReadThisYear / (readingTimeThisYear / 60)).toFixed(1) }}
-            <span class="insight-value">pages per hour</span>
+            <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
+              pages per hour
+            </span>
           </p>
-          <p *ngIf="readingTimeThisYear === 0">No data available</p>
+          <p *ngIf="readingTimeThisYear === 0" class="text-text-secondary-light dark:text-text-secondary-dark">
+            No data available
+          </p>
         </div>
-        
-        <div class="insight-card">
-          <h4>Best Reading Month</h4>
+
+        <!-- Best Reading Month -->
+        <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1">
+          <h4 class="text-lg font-medium mb-4 text-text-primary-light dark:text-text-primary-dark">Best Reading Month</h4>
           <ng-container *ngIf="getBestReadingMonth().books > 0; else noData">
-            <p>
+            <p class="text-primary text-xl font-semibold">
               {{ getBestReadingMonth().month }}
-              <span class="insight-value">{{ getBestReadingMonth().books }} books</span>
+              <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
+                {{ getBestReadingMonth().books }} books
+              </span>
             </p>
           </ng-container>
           <ng-template #noData>
-            <p>No data available</p>
+            <p class="text-text-secondary-light dark:text-text-secondary-dark">
+              No data available
+            </p>
           </ng-template>
         </div>
       </div>

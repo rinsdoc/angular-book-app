@@ -1,5 +1,120 @@
-/* styles.css (global styles) */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Define custom colors within a layer */
+@layer utilities {
+  /* Background colors */
+  .bg-background-light {
+    background-color: #f5f5f7;
+  }
+  .bg-background-dark {
+    background-color: #121212;
+  }
+  .bg-card-light {
+    background-color: #ffffff;
+  }
+  .bg-card-dark {
+    background-color: #1e1e1e;
+  }
+
+  /* Text colors */
+  .text-text-primary-light {
+    color: #212121;
+  }
+  .text-text-primary-dark {
+    color: #e1e1e1;
+  }
+  .text-text-secondary-light {
+    color: #757575;
+  }
+  .text-text-secondary-dark {
+    color: #a0a0a0;
+  }
+
+  /* Primary colors */
+  .text-primary {
+    color: #6200ea;
+  }
+  .bg-primary {
+    background-color: #6200ea;
+  }
+  .border-primary {
+    border-color: #6200ea;
+  }
+  .from-primary {
+    --tw-gradient-from: #6200ea;
+  }
+  .to-primary-light {
+    --tw-gradient-to: #9d46ff;
+  }
+  .hover\:bg-primary-light:hover {
+    background-color: #9d46ff;
+  }
+  .bg-primary\/5 {
+    background-color: rgba(98, 0, 234, 0.05);
+  }
+  .bg-primary\/10 {
+    background-color: rgba(98, 0, 234, 0.1);
+  }
+  .hover\:bg-primary\/10:hover {
+    background-color: rgba(98, 0, 234, 0.1);
+  }
+  .hover\:bg-primary\/20:hover {
+    background-color: rgba(98, 0, 234, 0.2);
+  }
+  .border-primary\/10 {
+    border-color: rgba(98, 0, 234, 0.1);
+  }
+  .border-primary\/20 {
+    border-color: rgba(98, 0, 234, 0.2);
+  }
+  .border-primary\/30 {
+    border-color: rgba(98, 0, 234, 0.3);
+  }
+  .focus\:border-primary:focus {
+    border-color: #6200ea;
+  }
+  .focus\:ring-primary\/20:focus {
+    --tw-ring-color: rgba(98, 0, 234, 0.2);
+  }
+  .fill-primary {
+    fill: #6200ea;
+  }
+}
+
+/* Custom base styles */
+@layer base {
+  body {
+    @apply font-sans bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark transition-colors duration-300;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-semibold leading-snug;
+  }
+
+  button {
+    @apply cursor-pointer font-sans;
+  }
+
+  input,
+  select,
+  textarea {
+    @apply font-sans transition-all duration-300;
+  }
+}
+
+/* Custom component classes */
+@layer components {
+  .loading-spinner {
+    @apply w-[50px] h-[50px] border-4 border-primary/10 rounded-full border-t-primary animate-spin mb-4;
+  }
+}
 
 :root {
   --primary-color: #6200ea;
@@ -221,27 +336,6 @@ a:hover {
   width: 100%;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* Responsive improvements */
 @media (max-width: 768px) {
   .book-content {
@@ -257,4 +351,3 @@ a:hover {
     grid-template-columns: 1fr !important;
   }
 }
-
