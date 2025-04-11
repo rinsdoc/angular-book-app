@@ -17,7 +17,7 @@
             <a
               routerLink="/discover"
               routerLinkActive="nav-link-active"
-              class="nav-link"
+              class="nav-link hover:bg-transparent hover:text-primary transition-colors"
             >
               Discover
             </a>
@@ -26,7 +26,7 @@
             <a
               routerLink="/my-library"
               routerLinkActive="nav-link-active"
-              class="nav-link"
+              class="nav-link hover:bg-transparent hover:text-primary transition-colors"
             >
               My Library
             </a>
@@ -35,7 +35,7 @@
             <a
               routerLink="/stats"
               routerLinkActive="nav-link-active"
-              class="nav-link"
+              class="nav-link hover:bg-transparent hover:text-primary transition-colors"
             >
               Reading Stats
             </a>
@@ -103,7 +103,7 @@
 <!-- Error Toast -->
 <div
   *ngIf="showError()"
-  class="fixed bottom-5 right-5 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-lg shadow-xl z-50 max-w-[350px] overflow-hidden animate-slideIn animate-pulse"
+  class="fixed bottom-5 right-5 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-lg shadow-xl z-50 max-w-[350px] overflow-hidden animate-slideIn"
 >
   <div class="relative">
     <div class="absolute top-0 left-0 w-1 h-full bg-white/50"></div>

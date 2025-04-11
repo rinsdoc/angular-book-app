@@ -14,10 +14,8 @@ export class ThemeService {
   }
 
   private initTheme(): void {
-    // Check for saved theme preference
     const savedTheme = localStorage.getItem(this.storageKey) as Theme | null
 
-    // Check for system preference if no saved preference
     if (!savedTheme) {
       const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
       this.setTheme(prefersDark ? "dark" : "light")
@@ -31,13 +29,12 @@ export class ThemeService {
     this.currentTheme.set(theme)
     localStorage.setItem(this.storageKey, theme)
 
-    // Apply theme to document
     if (theme === "dark") {
       document.documentElement.classList.add("dark-theme")
-      document.documentElement.classList.add("dark") // Add Tailwind dark class
+      document.documentElement.classList.add("dark")
     } else {
       document.documentElement.classList.remove("dark-theme")
-      document.documentElement.classList.remove("dark") // Remove Tailwind dark class
+      document.documentElement.classList.remove("dark")
     }
   }
 
