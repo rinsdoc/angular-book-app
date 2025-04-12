@@ -1,69 +1,104 @@
 <div class="min-h-screen flex flex-col bg-background-light dark:bg-background-dark transition-colors duration-300">
   <!-- Header -->
   <header class="bg-card-light dark:bg-card-dark shadow-md sticky top-0 z-50 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-center">
-      <!-- Logo -->
-      <div class="flex items-center gap-4 transition-transform duration-300 hover:scale-105 mb-4 sm:mb-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-12 h-12 fill-primary flex-shrink-0">
-          <path d="M21,4H3A2,2 0 0,0 1,6V19A2,2 0 0,0 3,21H21A2,2 0 0,0 23,19V6A2,2 0 0,0 21,4M3,19V6H11V19H3M21,19H13V6H21V19M14,9.5H20V11H14V9.5M14,12H20V13.5H14V12M14,14.5H20V16H14V14.5Z" />
-        </svg>
-        <h1 class="text-3xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent my-0 leading-none flex items-center">BookTracker</h1>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+      <div class="flex justify-between items-center">
+        <!-- Logo -->
+        <div class="flex items-center gap-4 transition-transform duration-300 hover:scale-105">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-12 h-12 fill-primary flex-shrink-0">
+            <path d="M21,4H3A2,2 0 0,0 1,6V19A2,2 0 0,0 3,21H21A2,2 0 0,0 23,19V6A2,2 0 0,0 21,4M3,19V6H11V19H3M21,19H13V6H21V19M14,9.5H20V11H14V9.5M14,12H20V13.5H14V12M14,14.5H20V16H14V14.5Z" />
+          </svg>
+          <h1 class="text-3xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent my-0 leading-none flex items-center">BookTracker</h1>
+        </div>
+
+        <!-- Navigation bar -->
+        <nav class="flex-1 ml-8 hidden sm:block">
+          <ul class="flex space-x-6">
+            <li>
+              <a
+                routerLink="/discover"
+                routerLinkActive="nav-link-active"
+                class="nav-link hover:bg-transparent hover:text-primary transition-colors"
+              >
+                Discover
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/my-library"
+                routerLinkActive="nav-link-active"
+                class="nav-link hover:bg-transparent hover:text-primary transition-colors"
+              >
+                My Library
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/stats"
+                routerLinkActive="nav-link-active"
+                class="nav-link hover:bg-transparent hover:text-primary transition-colors"
+              >
+                Reading Stats
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Theme Toggle -->
+        <button
+          (click)="toggleTheme()"
+          class="bg-transparent text-primary dark:text-primary-light border-none cursor-pointer"
+        >
+          <svg *ngIf="isDarkTheme()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg *ngIf="!isDarkTheme()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
       </div>
 
-      <!-- Navigation -->
-      <nav class="flex-1 sm:ml-8">
-        <ul class="flex justify-center sm:justify-start gap-6 sm:gap-10">
-          <li>
+      <!-- Mobile menu -->
+      <!-- Mobile menu -->
+      <nav class="mt-4 sm:hidden">
+        <ul class="grid grid-cols-3 gap-3">
+          <li class="flex">
             <a
               routerLink="/discover"
               routerLinkActive="nav-link-active"
-              class="nav-link hover:bg-transparent hover:text-primary transition-colors"
+              class="nav-link flex-1 text-center hover:bg-transparent hover:text-primary transition-colors py-3 rounded-lg border border-transparent hover:border-primary/10"
             >
               Discover
             </a>
           </li>
-          <li>
+          <li class="flex">
             <a
               routerLink="/my-library"
               routerLinkActive="nav-link-active"
-              class="nav-link hover:bg-transparent hover:text-primary transition-colors"
+              class="nav-link flex-1 text-center hover:bg-transparent hover:text-primary transition-colors py-3 rounded-lg border border-transparent hover:border-primary/10"
             >
-              My Library
+              Library
             </a>
           </li>
-          <li>
+          <li class="flex">
             <a
               routerLink="/stats"
               routerLinkActive="nav-link-active"
-              class="nav-link hover:bg-transparent hover:text-primary transition-colors"
+              class="nav-link flex-1 text-center hover:bg-transparent hover:text-primary transition-colors py-3 rounded-lg border border-transparent hover:border-primary/10"
             >
-              Reading Stats
+              Stats
             </a>
           </li>
         </ul>
       </nav>
-
-      <!-- Theme Toggle -->
-      <button
-        class="bg-transparent text-text-primary-light dark:text-text-primary-dark p-2 rounded-full w-10 h-10 flex items-center justify-center transition-all hover:bg-primary/10 hover:rotate-12 mt-4 sm:mt-0"
-        (click)="toggleTheme()"
-        aria-label="Toggle theme"
-      >
-        <svg *ngIf="isDarkTheme()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg *ngIf="!isDarkTheme()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </button>
     </div>
   </header>
 
