@@ -1,0 +1,42 @@
+/* Define custom properties */
+:root {
+  --primary: #3f51b5;
+  --primary-light: #7986cb;
+}
+
+/* Ensure chart containers are responsive */
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure canvas elements fill their containers */
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .chart-container {
+    min-height: 250px;
+  }
+}
+
+/* Custom shadow classes */
+.shadow-card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.dark .shadow-card-dark {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Gradient text for stats */
+.bg-gradient-text {
+  background: linear-gradient(to right, var(--primary), var(--primary-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
