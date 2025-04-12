@@ -125,6 +125,10 @@
     @apply text-primary after:w-full;
   }
 
+  .nav-link:hover {
+    text-decoration: none !important;
+  }
+
   /* Section titles */
   .section-title {
     @apply text-2xl sm:text-3xl font-bold mb-6 pb-2 relative;
@@ -151,11 +155,18 @@
 
   /* Tab buttons */
   .tab-button {
-    @apply flex-1 py-4 px-2 font-semibold text-text-secondary-light dark:text-text-secondary-dark border-b-3 border-transparent transition-all hover:bg-black/5 dark:hover:bg-white/5;
+    @apply flex-1 py-4 px-2 font-semibold
+    text-[#6200ea] bg-primary/40 border-b-3 border-transparent
+    hover:bg-primary/50
+    dark:text-gray-300 dark:bg-[#6200ea] dark:border-transparent
+    dark:hover:bg-[#3a0080];
   }
 
   .tab-button-active {
-    @apply text-primary border-primary;
+    @apply text-white border-primary bg-[#9d46ff]
+    hover:text-white hover:bg-[#8a35f0]
+    dark:border-primary-light dark:bg-primary/80
+    dark:hover:text-white;
   }
 
   /* Book cards */
