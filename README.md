@@ -6,8 +6,17 @@ Built with Angular, TailwindCSS, and RxJS, it presents an elegant interface with
 
 ![BookTracker Screenshot](src/assets/booktracker-screenshot.png)
 
-## Key Features
+## Table of Contents
 
+- [Key Features](#key-features)
+- [Development Environment Setup](#development-environment-setup)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Project Structure](#project-structure)
+- [Available Scripts](#available-scripts)
+- [Additional Resources](#additional-resources)
+
+## Key Features
 - **Discover Books**: Explore a wide collection of books with search and filtering by genre
 - **Reading Tracking**: Record your reading progress and set goals
 - **Adaptive Interface**: Responsive design with light/dark theme support
