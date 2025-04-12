@@ -1,4 +1,4 @@
-# BookTracker
+![BookTracker Logo](src/assets/booktracker-logo.png)
 
 A modern application to manage your book collection, developed with Angular 19.2.5. BookTracker allows you to discover new titles, track your reading progress, and organize your digital library efficiently.
 It offers advanced features such as genre search, personalized reading statistics, and reading goal management.
