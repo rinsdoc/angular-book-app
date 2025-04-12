@@ -82,4 +82,3 @@ These resources will help you better understand the technologies used in BookTra
 - [RxJS](https://rxjs.dev/) - Reactive programming library used in Angular
 - [TailwindCSS](https://tailwindcss.com/docs) - CSS framework used for interface design
 - [Tailwind Animation](https://github.com/jamiebuilds/tailwindcss-animate) - Plugin for adding animations with Tailwind
-```
