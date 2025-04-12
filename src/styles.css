@@ -125,6 +125,10 @@
     @apply text-primary after:w-full;
   }
 
+  .nav-link:hover {
+    text-decoration: none !important;
+  }
+
   /* Section titles */
   .section-title {
     @apply text-2xl sm:text-3xl font-bold mb-6 pb-2 relative;
