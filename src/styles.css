@@ -333,8 +333,19 @@ a {
 }
 
 a:hover {
-  color: var(--primary-light);
+  color: var(--primary-dark);
   text-decoration: underline;
+}
+
+a.text-white:hover,
+.btn-primary:hover,
+[class*="bg-primary"] a:hover {
+  color: white !important;
+  text-decoration: none;
+}
+
+.dark-theme a:hover {
+  color: var(--primary-light);
 }
 
 /* Loading spinner */
