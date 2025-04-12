@@ -68,7 +68,7 @@
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary-light"></div>
 
         <!-- Author -->
-        <div class="text-xl sm:text-2xl text-text-secondary-light dark:text-text-secondary-dark font-medium mb-8">
+        <div class="text-xl sm:text-2xl text-text-secondary-light dark:text-text-primary-dark font-medium mb-8">
           by {{ book.author }}
         </div>
 
@@ -76,17 +76,17 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10 bg-primary/5 p-6 rounded-lg border-l-4 border-primary">
           <div class="text-center transition-transform hover:-translate-y-1">
             <div class="text-sm text-text-secondary-light dark:text-text-secondary-dark uppercase tracking-wider mb-2">Published</div>
-            <div class="text-lg font-semibold text-primary">{{ book.published | date:'mediumDate' }}</div>
+            <div class="text-lg dark:text-primary-light font-semibold text-primary">{{ book.published | date:'mediumDate' }}</div>
           </div>
 
           <div class="text-center transition-transform hover:-translate-y-1">
             <div class="text-sm text-text-secondary-light dark:text-text-secondary-dark uppercase tracking-wider mb-2">Pages</div>
-            <div class="text-lg font-semibold text-primary">{{ book.pages }}</div>
+            <div class="text-lg dark:text-primary-light font-semibold text-primary">{{ book.pages }}</div>
           </div>
 
           <div class="text-center transition-transform hover:-translate-y-1">
             <div class="text-sm text-text-secondary-light dark:text-text-secondary-dark uppercase tracking-wider mb-2">Rating</div>
-            <div class="text-lg font-semibold text-primary">{{ book.avgRating.toFixed(1) }} ★</div>
+            <div class="text-lg dark:text-primary-light font-semibold text-primary">{{ book.avgRating.toFixed(1) }} ★</div>
           </div>
         </div>
 
@@ -99,7 +99,7 @@
         <div class="flex flex-wrap gap-3 mb-10">
           <span
             *ngFor="let genre of book.genres"
-            class="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium transition-all hover:-translate-y-0.5 hover:bg-primary/20"
+            class="bg-primary/10 dark:bg-primary text-primary dark:text-text-primary-dark px-4 py-2 rounded-full text-sm font-medium transition-all hover:-translate-y-0.5 hover:bg-primary/20 dark:hover:bg-primary/30"
           >
             {{ genre }}
           </span>
