@@ -13,7 +13,6 @@ Built with Angular, TailwindCSS, and RxJS, it presents an elegant interface with
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Project Structure](#project-structure)
-- [Available Scripts](#available-scripts)
 - [Additional Resources](#additional-resources)
 
 ## Key Features
@@ -35,7 +34,6 @@ Built with Angular, TailwindCSS, and RxJS, it presents an elegant interface with
 1. Clone the repository:
    ```bash
    git clone https://github.com/rinsdoc/angular-book-app
-   cd bookverse
    ```
 
 2. Install dependencies:
@@ -63,15 +61,6 @@ src/
 ├── assets/              # Images and static resources
 └── styles/              # Global styles and variables
 ```
-
-## Available Scripts
-
-- `ng serve` - Starts the development server
-- `ng build` - Compiles the project for production
-- `ng test` - Runs unit tests with Karma
-- `ng lint` - Checks the code with ESLint
-- `ng e2e` - Runs end-to-end tests
-
 
 ## Additional Resources
 
