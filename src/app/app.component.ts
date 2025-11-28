@@ -5,11 +5,26 @@ import { RouterOutlet, RouterModule } from "@angular/router"
 import { HttpClientModule } from "@angular/common/http"
 import { ThemeService } from "./services/theme.service"
 import { BookService } from "./services/book.service"
+import { NgIconComponent, provideIcons } from '@ng-icons/core'
+import { lucideSun, lucideMoon } from '@ng-icons/lucide'
+import { ButtonModule } from 'primeng/button'
+import { ToastModule } from 'primeng/toast'
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterModule, HttpClientModule],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterModule,
+    HttpClientModule,
+    NgIconComponent,
+    ButtonModule,
+    ToastModule,
+  ],
+  providers: [
+    provideIcons({ lucideSun, lucideMoon })
+  ],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
 })

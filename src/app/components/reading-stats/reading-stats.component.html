@@ -58,15 +58,19 @@
           <canvas #genreCanvas width="500" height="300"></canvas>
 
           <!-- Fallback for browsers without canvas support -->
-          <div class="hidden w-full" @if="genreDistribution.length > 0">
-            <div *ngFor="let genre of genreDistribution.slice(0, 5)" class="flex items-center mb-4">
-              <span class="w-24 text-sm text-text-secondary-light dark:text-text-secondary-dark">{{ genre.name }}</span>
-              <div class="h-6 bg-gradient-to-r from-primary to-primary-light rounded-full flex items-center justify-end px-3 text-white text-xs font-medium min-w-[30px] transition-all duration-1000 flex-1"
-                   [style.width.%]="(genre.value / totalBooksRead) * 100">
-                {{ genre.value }}
-              </div>
+          @if (genreDistribution.length > 0) {
+            <div class="hidden w-full">
+              @for (genre of genreDistribution.slice(0, 5); track genre) {
+                <div class="flex items-center mb-4">
+                  <span class="w-24 text-sm text-text-secondary-light dark:text-text-secondary-dark">{{ genre.name }}</span>
+                  <div class="h-6 bg-gradient-to-r from-primary to-primary-light rounded-full flex items-center justify-end px-3 text-white text-xs font-medium min-w-[30px] transition-all duration-1000 flex-1"
+                       [style.width.%]="(genre.value / totalBooksRead) * 100">
+                    {{ genre.value }}
+                  </div>
+                </div>
+              }
             </div>
-          </div>
+          }
         </div>
       </div>
 
@@ -81,13 +85,15 @@
 
           <!-- Fallback for browsers without canvas support -->
           <div class="hidden w-full">
-            <div *ngFor="let month of monthlyProgress" class="flex items-center mb-4">
-              <span class="w-24 text-sm text-text-secondary-light dark:text-text-secondary-dark">{{ month.month }}</span>
-              <div class="h-6 bg-gradient-to-r from-primary to-primary-light rounded-full flex items-center justify-end px-3 text-white text-xs font-medium min-w-[30px] transition-all duration-1000 flex-1"
-                   [style.width.%]="(month.books / 5) * 100">
-                {{ month.books }} books
+            @for (month of monthlyProgress; track month) {
+              <div class="flex items-center mb-4">
+                <span class="w-24 text-sm text-text-secondary-light dark:text-text-secondary-dark">{{ month.month }}</span>
+                <div class="h-6 bg-gradient-to-r from-primary to-primary-light rounded-full flex items-center justify-end px-3 text-white text-xs font-medium min-w-[30px] transition-all duration-1000 flex-1"
+                     [style.width.%]="(month.books / 5) * 100">
+                  {{ month.books }} books
+                </div>
               </div>
-            </div>
+            }
           </div>
         </div>
       </div>
