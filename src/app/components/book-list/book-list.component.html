@@ -38,60 +38,64 @@
   </div>
 
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="flex flex-col items-center justify-center min-h-[300px]">
-    <div class="loading-spinner"></div>
-    <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg">Loading books...</p>
-  </div>
+  @if (isLoading) {
+    <div class="flex flex-col items-center justify-center min-h-[300px]">
+      <div class="loading-spinner"></div>
+      <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg">Loading books...</p>
+    </div>
+  }
 
   <!-- Book Grid -->
-  <div *ngIf="!isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-    <!-- No Results -->
-    <div *ngIf="filteredBooks.length === 0" class="col-span-full bg-card-light dark:bg-card-dark rounded-xl p-8 text-center shadow-card dark:shadow-card-dark">
-      <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg mb-6">No books found matching your criteria.</p>
-      <button
-        (click)="resetFilters()"
-        class="btn-primary"
-      >
-        Reset Filters
-      </button>
-    </div>
-
-    <!-- Book Cards -->
-    <div
-      *ngFor="let book of filteredBooks; let i = index"
-      class="book-card"
-    >
-      <div class="book-cover">
-        <img
-          [src]="book.cover"
-          [alt]="book.title"
-        />
-        <div class="book-cover-overlay"></div>
-      </div>
-
-      <div class="book-info">
-        <div class="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
-
-        <h3 class="book-title">{{ book.title }}</h3>
-        <p class="book-author">by {{ book.author }}</p>
-
-        <div class="book-meta">
-          <span class="book-rating">
-            <span>★</span> {{ book.avgRating.toFixed(1) }}
-          </span>
-          <span class="book-genres">
-            {{ book.genres.join(", ") }}
-          </span>
+  @if (!isLoading) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <!-- No Results -->
+      @if (filteredBooks.length === 0) {
+        <div class="col-span-full bg-card-light dark:bg-card-dark rounded-xl p-8 text-center shadow-card dark:shadow-card-dark">
+          <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg mb-6">No books found matching your criteria.</p>
+          <button
+            (click)="resetFilters()"
+            class="btn-primary"
+          >
+            Reset Filters
+          </button>
         </div>
+      }
+      <!-- Book Cards -->
+      @for (book of filteredBooks; track book) {
+        <div class="book-card">
+          <div class="book-cover">
+            <img
+              [src]="book.cover"
+              [alt]="book.title"
+            />
+            <div class="book-cover-overlay"></div>
+          </div>
 
-        <a
-          [routerLink]="['/books', book.id]"
-          class="book-action group"
-        >
-          <span class="relative z-10">View Details</span>
-          <span class="book-action-overlay"></span>
-        </a>
-      </div>
+          <div class="book-info">
+            <div class="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+
+            <h3 class="book-title">{{ book.title }}</h3>
+            <p class="book-author">by {{ book.author }}</p>
+
+            <div class="book-meta">
+              <span class="book-rating">
+                <span>★</span> {{ book.avgRating.toFixed(1) }}
+              </span>
+              <span class="book-genres">
+                {{ book.genres.join(", ") }}
+              </span>
+            </div>
+
+            <a
+              [routerLink]="['/books', book.id]"
+              class="book-action group"
+            >
+              <span class="relative z-10">View Details</span>
+              <span class="book-action-overlay"></span>
+            </a>
+          </div>
+        </div>
+      }
     </div>
-  </div>
+  }
 </div>

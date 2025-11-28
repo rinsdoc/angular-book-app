@@ -5,12 +5,14 @@
   </h2>
 
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="flex flex-col items-center justify-center min-h-[400px]">
-    <div class="w-16 h-16 border-4 border-primary/10 border-t-primary rounded-full animate-spin mb-6"></div>
-    <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg">Analyzing your reading data...</p>
-  </div>
+  @if (isLoading) {
+    <div class="flex flex-col items-center justify-center min-h-[400px]">
+      <div class="w-16 h-16 border-4 border-primary/10 border-t-primary rounded-full animate-spin mb-6"></div>
+      <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg">Analyzing your reading data...</p>
+    </div>
+  }
 
-  <ng-container *ngIf="!isLoading">
+  @if (!isLoading) {
     <!-- Stats Summary Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
       <!-- Books Read Card -->
@@ -56,7 +58,7 @@
           <canvas #genreCanvas width="500" height="300"></canvas>
 
           <!-- Fallback for browsers without canvas support -->
-          <div class="hidden w-full" *ngIf="genreDistribution.length > 0">
+          <div class="hidden w-full" @if="genreDistribution.length > 0">
             <div *ngFor="let genre of genreDistribution.slice(0, 5)" class="flex items-center mb-4">
               <span class="w-24 text-sm text-text-secondary-light dark:text-text-secondary-dark">{{ genre.name }}</span>
               <div class="h-6 bg-gradient-to-r from-primary to-primary-light rounded-full flex items-center justify-end px-3 text-white text-xs font-medium min-w-[30px] transition-all duration-1000 flex-1"
@@ -102,64 +104,71 @@
         <!-- Most Read Genre -->
         <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1">
           <h4 class="text-lg font-medium mb-4 text-text-primary-light dark:text-text-primary-dark">Most Read Genre</h4>
-          <p *ngIf="genreDistribution.length > 0" class="text-primary text-xl font-semibold">
-            {{ genreDistribution[0].name }}
-            <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
-              {{ genreDistribution[0].value }} books
-            </span>
-          </p>
-          <p *ngIf="genreDistribution.length === 0" class="text-text-secondary-light dark:text-text-secondary-dark">
-            No data available
-          </p>
+          @if (genreDistribution.length > 0) {
+            <p class="text-primary text-xl font-semibold">
+              {{ genreDistribution[0].name }}
+              <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
+                {{ genreDistribution[0].value }} books
+              </span>
+            </p>
+          } @else {
+            <p class="text-text-secondary-light dark:text-text-secondary-dark">
+              No data available
+            </p>
+          }
         </div>
 
         <!-- Average Reading Time -->
         <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1">
           <h4 class="text-lg font-medium mb-4 text-text-primary-light dark:text-text-primary-dark">Average Reading Time</h4>
-          <p *ngIf="totalBooksRead > 0" class="text-primary text-xl font-semibold">
-            {{ (readingTimeThisYear / totalBooksRead / 60).toFixed(1) }}
-            <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
-              hours per book
-            </span>
-          </p>
-          <p *ngIf="totalBooksRead === 0" class="text-text-secondary-light dark:text-text-secondary-dark">
-            No data available
-          </p>
+          @if (totalBooksRead > 0) {
+            <p class="text-primary text-xl font-semibold">
+              {{ (readingTimeThisYear / totalBooksRead / 60).toFixed(1) }}
+              <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
+                hours per book
+              </span>
+            </p>
+          } @else {
+            <p class="text-text-secondary-light dark:text-text-secondary-dark">
+              No data available
+            </p>
+          }
         </div>
 
         <!-- Reading Pace -->
         <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1">
           <h4 class="text-lg font-medium mb-4 text-text-primary-light dark:text-text-primary-dark">Reading Pace</h4>
-          <p *ngIf="readingTimeThisYear > 0" class="text-primary text-xl font-semibold">
-            {{ (pagesReadThisYear / (readingTimeThisYear / 60)).toFixed(1) }}
-            <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
-              pages per hour
-            </span>
-          </p>
-          <p *ngIf="readingTimeThisYear === 0" class="text-text-secondary-light dark:text-text-secondary-dark">
-            No data available
-          </p>
+          @if (readingTimeThisYear > 0) {
+            <p class="text-primary text-xl font-semibold">
+              {{ (pagesReadThisYear / (readingTimeThisYear / 60)).toFixed(1) }}
+              <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
+                pages per hour
+              </span>
+            </p>
+          } @else {
+            <p class="text-text-secondary-light dark:text-text-secondary-dark">
+              No data available
+            </p>
+          }
         </div>
 
         <!-- Best Reading Month -->
         <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1">
           <h4 class="text-lg font-medium mb-4 text-text-primary-light dark:text-text-primary-dark">Best Reading Month</h4>
-          <ng-container *ngIf="getBestReadingMonth().books > 0; else noData">
+          @if (getBestReadingMonth().books > 0) {
             <p class="text-primary text-xl font-semibold">
               {{ getBestReadingMonth().month }}
               <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
                 {{ getBestReadingMonth().books }} books
               </span>
             </p>
-          </ng-container>
-          <ng-template #noData>
+          } @else {
             <p class="text-text-secondary-light dark:text-text-secondary-dark">
               No data available
             </p>
-          </ng-template>
+          }
         </div>
       </div>
     </div>
-  </ng-container>
+  }
 </div>
-
