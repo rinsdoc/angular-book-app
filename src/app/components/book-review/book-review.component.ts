@@ -17,7 +17,6 @@ interface Review {
   selector: "app-book-review",
   templateUrl: "./book-review.component.html",
   styleUrls: ["./book-review.component.css"],
-  standalone: true,
   imports: [CommonModule],
 })
 export class BookReviewComponent implements OnInit {

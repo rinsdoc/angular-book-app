@@ -1,16 +1,14 @@
-// book-list.component.ts
 import { Component, OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { FormsModule } from "@angular/forms"
 import { RouterModule } from "@angular/router"
-import { BookService } from "../../services/book.service"
-import { Book } from "../../services/book.service"
+import { BookService } from "../../application/book.service"
+import { Book } from "../../domain/book"
 
 @Component({
   selector: "app-book-list",
   templateUrl: "./book-list.component.html",
   styleUrls: ["./book-list.component.css"],
-  standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
 })
 export class BookListComponent implements OnInit {
@@ -29,22 +27,19 @@ export class BookListComponent implements OnInit {
 
   loadBooks(): void {
     this.isLoading = true
-    this.bookService.getAllBooks().subscribe({
-      next: (books) => {
+    this.bookService
+      .getBooks()
+      .then((books) => {
         this.books = books
         this.filteredBooks = books
-
-        // Extract unique genres for filter
         const allGenres = books.flatMap((book) => book.genres)
         this.genres = [...new Set(allGenres)].sort()
-
         this.isLoading = false
-      },
-      error: (err) => {
+      })
+      .catch((err) => {
         console.error("Error loading books:", err)
         this.isLoading = false
-      },
-    })
+      })
   }
 
   searchBooks(): void {
@@ -74,4 +69,3 @@ export class BookListComponent implements OnInit {
     })
   }
 }
-

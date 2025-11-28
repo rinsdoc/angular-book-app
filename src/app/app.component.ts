@@ -1,18 +1,16 @@
 // app.component.ts
-import { Component } from "@angular/core"
-import { CommonModule } from "@angular/common"
-import { RouterOutlet, RouterModule } from "@angular/router"
-import { HttpClientModule } from "@angular/common/http"
-import { ThemeService } from "./services/theme.service"
-import { BookService } from "./services/book.service"
-import { NgIconComponent, provideIcons } from '@ng-icons/core'
-import { lucideSun, lucideMoon } from '@ng-icons/lucide'
-import { ButtonModule } from 'primeng/button'
-import { ToastModule } from 'primeng/toast'
+import {Component} from "@angular/core"
+import {CommonModule} from "@angular/common"
+import {RouterOutlet, RouterModule} from "@angular/router"
+import {HttpClientModule} from "@angular/common/http"
+import {ThemeService} from "./services/theme.service"
+import {BookService} from "./application/book.service"
+import {NgIconComponent} from '@ng-icons/core'
+import {ButtonModule} from 'primeng/button'
+import {ToastModule} from 'primeng/toast'
 
 @Component({
   selector: "app-root",
-  standalone: true,
   imports: [
     CommonModule,
     RouterOutlet,
@@ -21,9 +19,6 @@ import { ToastModule } from 'primeng/toast'
     NgIconComponent,
     ButtonModule,
     ToastModule,
-  ],
-  providers: [
-    provideIcons({ lucideSun, lucideMoon })
   ],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
@@ -34,7 +29,8 @@ export class AppComponent {
   constructor(
     private themeService: ThemeService,
     private bookService: BookService,
-  ) {}
+  ) {
+  }
 
   toggleTheme(): void {
     this.themeService.toggleTheme()
@@ -45,15 +41,14 @@ export class AppComponent {
   }
 
   showError(): boolean {
-    return !!this.bookService.error()
+    return false; // TODO: Implementar gestión de errores global
   }
 
   getErrorMessage(): string {
-    return this.bookService.error() || ""
+    return ""; // TODO: Implementar gestión de errores global
   }
 
   clearError(): void {
-    this.bookService.clearError()
+    // TODO: Implementar gestión de errores global
   }
 }
-
