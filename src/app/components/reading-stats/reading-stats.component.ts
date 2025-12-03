@@ -1,16 +1,14 @@
-// reading-stats.component.ts
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from "@angular/core"
-import { CommonModule } from "@angular/common"
-import { HttpClient } from "@angular/common/http"
-import { forkJoin } from "rxjs"
-import { BookService } from "../../services/book.service"
-import { ReadingSessionService } from "../../services/reading-session.service"
+import {Component, OnInit, AfterViewInit, ElementRef, ViewChild, ChangeDetectorRef} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {BookService} from "../../application/book.service";
+import {ReadingSessionService} from "../../services/reading-session.service";
+import {Book} from '../../domain/book';
+import {UserBook} from '../../domain/user-book';
 
 @Component({
   selector: "app-reading-stats",
   templateUrl: "./reading-stats.component.html",
   styleUrls: ["./reading-stats.component.css"],
-  standalone: true,
   imports: [CommonModule],
 })
 export class ReadingStatsComponent implements OnInit, AfterViewInit {
@@ -23,6 +21,8 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
   readingTimeThisYear = 0 // in minutes
   genreDistribution: { name: string; value: number }[] = []
   monthlyProgress: { month: string; books: number; pages: number }[] = []
+  books: Book[] = [];
+  userBooks: UserBook[] = [];
 
   isLoading = true
 
@@ -41,10 +41,11 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
   ]
 
   constructor(
-    private http: HttpClient,
     private bookService: BookService,
     private readingSessionService: ReadingSessionService,
-  ) {}
+    private cdr: ChangeDetectorRef
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadReadingStats()
@@ -54,85 +55,69 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
     // Charts will be initialized after data is loaded
   }
 
-  loadReadingStats(): void {
-    this.isLoading = true
+  async loadReadingStats(): Promise<void> {
+    this.isLoading = true;
+    this.cdr.detectChanges();
+    try {
+      const books = await this.bookService.getBooks();
+      this.books = books;
+      this.userBooks = await this.bookService.getUserBooks(this.currentUserId);
 
-    // Get user books and all books
-    const userBooks$ = this.bookService.getUserBooks(this.currentUserId)
-    const books$ = this.bookService.getAllBooks()
-    const sessions$ = this.http.get<any[]>("/assets/reading-sessions.json")
+      const sessions = await this.readingSessionService.getSessionsByUserId(this.currentUserId);
 
-    forkJoin([userBooks$, books$, sessions$]).subscribe({
-      next: ([userBooks, books, sessions]) => {
-        console.log("Loaded data for stats:", { userBooks, books, sessions })
+      this.totalBooksRead = this.userBooks.filter((ub) => ub.status === 'read').length;
+      const readBookIds = this.userBooks.filter((ub) => ub.status === 'read').map((ub) => ub.bookId.toString());
+      const readBooks = books.filter((book) => readBookIds.includes(book.id.toString()));
 
-        // Books read count
-        this.totalBooksRead = userBooks.filter((ub) => ub.status === "read").length
+      const genreCounts: { [key: string]: number } = {};
+      readBooks.forEach((book) => {
+        book.genres.forEach((genre: string) => {
+          genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+        });
+      });
+      this.genreDistribution = Object.entries(genreCounts)
+        .map(([name, value]) => ({name, value}))
+        .sort((a, b) => b.value - a.value);
 
-        // Calculate genre distribution
-        const readBookIds = userBooks.filter((ub) => ub.status === "read").map((ub) => ub.bookId)
-        const readBooks = books.filter((book) => readBookIds.includes(book.id))
+      const year = new Date().getFullYear().toString();
+      const readSessionsThisYear = sessions.filter((s: any) => {
+        const userBookId = s.userBookId;
+        const matchingUserBook = this.userBooks.find((ub) => ub.id === userBookId);
+        return matchingUserBook && s.date.startsWith(year);
+      });
+      this.pagesReadThisYear = readSessionsThisYear.reduce((sum: number, s: any) => sum + s.pagesRead, 0);
+      this.readingTimeThisYear = readSessionsThisYear.reduce((sum: number, s: any) => sum + s.minutes, 0);
 
-        // Count genres
-        const genreCounts: { [key: string]: number } = {}
-        readBooks.forEach((book) => {
-          book.genres.forEach((genre: string) => {
-            genreCounts[genre] = (genreCounts[genre] || 0) + 1
-          })
-        })
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      this.monthlyProgress = months.map((month) => ({month, books: 0, pages: 0}));
+      readSessionsThisYear.forEach((session: any) => {
+        const monthIndex = new Date(session.date).getMonth();
+        this.monthlyProgress[monthIndex].pages += session.pagesRead;
+      });
+      this.userBooks
+        .filter((ub) => ub.dateFinished && ub.dateFinished.startsWith(year))
+        .forEach((ub) => {
+          const monthIndex = new Date(ub.dateFinished!).getMonth();
+          this.monthlyProgress[monthIndex].books += 1;
+        });
 
-        // Convert to array for chart
-        this.genreDistribution = Object.entries(genreCounts)
-          .map(([name, value]) => ({ name, value }))
-          .sort((a, b) => b.value - a.value) // Sort by value descending
-
-        // Calculate pages and time
-        const readSessionsThisYear = sessions.filter((s) => {
-          const userBookId = s.userBookId
-          const matchingUserBook = userBooks.find((ub) => ub.id === userBookId)
-          return matchingUserBook && s.date.startsWith("2023") // Hard-coded year for demo
-        })
-
-        this.pagesReadThisYear = readSessionsThisYear.reduce((sum, s) => sum + s.pagesRead, 0)
-        this.readingTimeThisYear = readSessionsThisYear.reduce((sum, s) => sum + s.minutes, 0)
-
-        // Monthly progress
-        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        this.monthlyProgress = months.map((month) => ({ month, books: 0, pages: 0 }))
-
-        readSessionsThisYear.forEach((session) => {
-          const monthIndex = new Date(session.date).getMonth()
-          this.monthlyProgress[monthIndex].pages += session.pagesRead
-        })
-
-        userBooks
-          .filter((ub) => ub.dateFinished && ub.dateFinished.startsWith("2023"))
-          .forEach((ub) => {
-            // Since we've already filtered for ub.dateFinished being truthy, we can safely assert it's not undefined
-            const monthIndex = new Date(ub.dateFinished!).getMonth()
-            this.monthlyProgress[monthIndex].books += 1
-          })
-
-        this.isLoading = false
-
-        // Initialize charts after data is loaded
-        setTimeout(() => {
-          this.initGenreChart()
-          this.initMonthlyChart()
-        }, 0)
-      },
-      error: (err) => {
-        console.error("Error loading reading stats:", err)
-        this.isLoading = false
-      },
-    })
+      setTimeout(() => {
+        this.initGenreChart();
+        this.initMonthlyChart();
+      }, 0);
+    } catch (err) {
+      console.error('Error loading reading stats:', err);
+    } finally {
+      this.isLoading = false;
+      this.cdr.detectChanges();
+    }
   }
 
   getBestReadingMonth() {
     if (!this.monthlyProgress || this.monthlyProgress.length === 0) {
-      return { month: "No data available", books: 0 }
+      return {month: "No data available", books: 0}
     }
-    return this.monthlyProgress.reduce((max, month) => (month.books > max.books ? month : max), { month: "", books: 0 })
+    return this.monthlyProgress.reduce((max, month) => (month.books > max.books ? month : max), {month: "", books: 0})
   }
 
   initGenreChart(): void {
@@ -148,7 +133,6 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
     ctx.clearRect(0, 0, this.genreCanvas.nativeElement.width, this.genreCanvas.nativeElement.height)
 
     const canvasWidth = this.genreCanvas.nativeElement.width
-    const canvasHeight = this.genreCanvas.nativeElement.height
     const barHeight = 30
     const barGap = 15
     const maxBarWidth = canvasWidth - 150 // Leave space for labels
@@ -196,9 +180,8 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
     ctx.clearRect(0, 0, this.monthlyCanvas.nativeElement.width, this.monthlyCanvas.nativeElement.height)
 
     const canvasWidth = this.monthlyCanvas.nativeElement.width
-    const canvasHeight = this.monthlyCanvas.nativeElement.height
     const barWidth = (canvasWidth - 60) / 12 // 12 months
-    const maxBarHeight = canvasHeight - 60 // Leave space for labels
+    const maxBarHeight = canvasWidth - 60 // Leave space for labels
 
     // Find the maximum value for scaling
     const maxBooks = Math.max(...this.monthlyProgress.map((m) => m.books), 1)
@@ -207,7 +190,7 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
     this.monthlyProgress.forEach((month, index) => {
       const x = index * barWidth + 40
       const barHeight = (month.books / maxBooks) * maxBarHeight
-      const y = canvasHeight - barHeight - 30
+      const y = canvasWidth - barHeight - 30
 
       // Draw bar
       ctx.fillStyle = this.chartColors[index % this.chartColors.length]
@@ -217,7 +200,7 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
       ctx.fillStyle = "#666"
       ctx.font = "12px Arial"
       ctx.textAlign = "center"
-      ctx.fillText(month.month, x + (barWidth - 10) / 2, canvasHeight - 10)
+      ctx.fillText(month.month, x + (barWidth - 10) / 2, canvasWidth - 10)
 
       // Draw value if there are books read
       if (month.books > 0) {

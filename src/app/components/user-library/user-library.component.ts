@@ -1,39 +1,47 @@
-// user-library.component.ts
-import { Component, OnInit } from "@angular/core"
+import {ChangeDetectorRef, Component, OnInit} from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { FormsModule } from "@angular/forms"
 import { RouterModule } from "@angular/router"
-import { BookService } from "../../services/book.service"
-import { UserBook } from "../../services/book.service"
-
-interface UserBookWithDetails extends UserBook {
-  book?: any // Would be proper Book type in real implementation
-}
+import { BookService } from "../../application/book.service"
+import { UserBook } from "../../domain/user-book"
+import { Book } from "../../domain/book"
 
 @Component({
   selector: "app-user-library",
   templateUrl: "./user-library.component.html",
   styleUrls: ["./user-library.component.css"],
-  standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
 })
 export class UserLibraryComponent implements OnInit {
-  userBooks: UserBookWithDetails[] = []
-  filteredBooks: UserBookWithDetails[] = []
-  currentUserId = 1 // Hard-coded for demo
+  userBooks: UserBook[] = []
+  filteredBooks: UserBook[] = []
+  books: Book[] = []
+  currentUserId = 1
   activeTab: "all" | "reading" | "toRead" | "read" = "all"
+  isLoading = true
 
-  constructor(private bookService: BookService) {}
+  constructor(
+    private bookService: BookService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadUserBooks()
   }
 
-  loadUserBooks(): void {
-    this.bookService.getUserBookDetails(this.currentUserId).subscribe((books) => {
-      this.userBooks = books
+  async loadUserBooks(): Promise<void> {
+    this.isLoading = true
+    this.cdr.detectChanges()
+    try {
+      this.userBooks = await this.bookService.getUserBooks(this.currentUserId)
+      this.books = await this.bookService.getBooks()
       this.filterByTab(this.activeTab)
-    })
+    } catch (err) {
+      console.error("Error loading user books:", err)
+    } finally {
+      this.isLoading = false
+      this.cdr.detectChanges()
+    }
   }
 
   filterByTab(tab: "all" | "reading" | "toRead" | "read"): void {
@@ -54,15 +62,16 @@ export class UserLibraryComponent implements OnInit {
     }
   }
 
-  updateStatus(userBookId: number, newStatus: UserBook["status"]): void {
-    this.bookService.updateBookStatus(userBookId, newStatus).subscribe(() => {
-      // Update local state
-      const bookIndex = this.userBooks.findIndex((b) => b.id === userBookId)
-      if (bookIndex !== -1) {
-        this.userBooks[bookIndex].status = newStatus
-        this.filterByTab(this.activeTab)
-      }
-    })
+  async updateStatus(userBookId: number, newStatus: UserBook["status"]): Promise<void> {
+    const updated = await this.bookService.updateBookStatus(userBookId, newStatus)
+    const bookIndex = this.userBooks.findIndex((b) => b.id === userBookId)
+    if (bookIndex !== -1) {
+      this.userBooks[bookIndex].status = updated.status
+      this.filterByTab(this.activeTab)
+    }
+  }
+
+  getBookDetails(userBook: UserBook): Book | undefined {
+    return this.books.find((book) => book.id.toString() === userBook.bookId.toString())
   }
 }
-

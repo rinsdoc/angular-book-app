@@ -47,7 +47,6 @@ export class BookService {
     this.isLoading.set(true)
     this.getAllBooks().subscribe({
       next: (books) => {
-        console.log("Books fetched successfully:", books) // Debug log
         this.books.set(books)
         this.isLoading.set(false)
       },
@@ -61,9 +60,7 @@ export class BookService {
   }
 
   getAllBooks(): Observable<Book[]> {
-    console.log("Fetching books from:", this.apiUrl)
     return this.http.get<Book[]>(this.apiUrl).pipe(
-      tap((books) => console.log("Fetched books:", books)),
       catchError((err) => {
         console.error("Error fetching books:", err)
         this.error.set(`Failed to load books from ${this.apiUrl}. Error: ${err.message}`)
@@ -74,7 +71,6 @@ export class BookService {
 
   getBookById(id: number): Observable<Book | null> {
     return this.http.get<Book[]>(this.apiUrl).pipe(
-      tap((books) => console.log("Fetched books for ID lookup:", books)),
       map((books) => books.find((book) => book.id === id) || null),
       catchError((err) => {
         console.error(`Error fetching book with id ${id}:`, err)
@@ -86,11 +82,9 @@ export class BookService {
 
   getUserBooks(userId: number): Observable<UserBook[]> {
     this.isLoading.set(true)
-    console.log("Fetching user books from:", this.userBooksUrl)
     return this.http.get<UserBook[]>(this.userBooksUrl).pipe(
       map((userBooks) => userBooks.filter((book) => book.userId === userId)),
       tap((userBooks) => {
-        console.log("Fetched user books:", userBooks)
         this.userBooks.set(userBooks)
         this.isLoading.set(false)
       }),
@@ -105,7 +99,6 @@ export class BookService {
 
   getUserBookDetails(userId: number): Observable<any[]> {
     this.isLoading.set(true)
-    console.log("Fetching user book details")
     return this.http.get<UserBook[]>(this.userBooksUrl).pipe(
       map((userBooks) => userBooks.filter((book) => book.userId === userId)),
       switchMap((userBooks) => {
@@ -120,7 +113,6 @@ export class BookService {
         )
       }),
       tap((books) => {
-        console.log("Fetched user book details:", books)
         this.isLoading.set(false)
       }),
       catchError((err) => {
