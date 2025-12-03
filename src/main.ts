@@ -1,6 +1,7 @@
 import { bootstrapApplication } from "@angular/platform-browser"
 import { provideRouter } from "@angular/router"
 import { provideHttpClient, withFetch } from "@angular/common/http"
+import { provideZoneChangeDetection } from "@angular/core"
 import { provideIcons } from '@ng-icons/core'
 import { lucideSun, lucideMoon } from '@ng-icons/lucide'
 
@@ -15,6 +16,7 @@ import { ReadingSessionRepositoryAdapter } from "./app/infrastructure/reading-se
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withFetch()),
     { provide: BOOK_REPOSITORY_PORT, useClass: BookRepositoryAdapter },

@@ -39,8 +39,17 @@
     </button>
   </div>
 
+  <!-- Loading State -->
+  @if (isLoading) {
+    <div class="flex flex-col items-center justify-center min-h-[300px]">
+      <div class="loading-spinner"></div>
+      <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg">Loading your library...</p>
+    </div>
+  }
+
   <!-- Library Books List -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  @if (!isLoading) {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div
       *ngFor="let userBook of filteredBooks"
       class="bg-card-light dark:bg-card-dark rounded-2xl overflow-hidden shadow-lg dark:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-gray-100 dark:border-gray-800"
@@ -135,5 +144,6 @@
         </div>
       </div>
     </div>
-  </div>
+    </div>
+  }
 </div>

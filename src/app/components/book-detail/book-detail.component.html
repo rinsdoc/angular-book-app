@@ -1,5 +1,13 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
-  @if (book) {
+  <!-- Loading State -->
+  @if (isLoading) {
+    <div class="flex flex-col items-center justify-center min-h-[400px]">
+      <div class="loading-spinner"></div>
+      <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg">Loading book details...</p>
+    </div>
+  }
+
+  @if (!isLoading && book) {
     <!-- Book Header -->
     <div class="flex items-center mb-10 relative">
       <button

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from "@angular/core";
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BookService } from "../../application/book.service";
 import { ReadingSessionService } from "../../services/reading-session.service";
@@ -43,6 +43,7 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
   constructor(
     private bookService: BookService,
     private readingSessionService: ReadingSessionService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -55,22 +56,19 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
 
   async loadReadingStats(): Promise<void> {
     this.isLoading = true;
+    this.cdr.detectChanges();
     try {
       const books = await this.bookService.getBooks();
       this.books = books;
       console.log('Books loaded:', books.length);
 
-      // Obtiene los libros del usuario desde el dominio hexagonal
       this.userBooks = await this.bookService.getUserBooks(this.currentUserId);
-      console.log('User books loaded:', this.userBooks.length);
 
-      // Obtiene las sesiones de lectura
       const sessions = await this.readingSessionService.getSessionsByUserId(this.currentUserId);
-      console.log('Sessions loaded:', sessions.length);
 
       this.totalBooksRead = this.userBooks.filter((ub) => ub.status === 'read').length;
-      const readBookIds = this.userBooks.filter((ub) => ub.status === 'read').map((ub) => ub.bookId);
-      const readBooks = books.filter((book) => readBookIds.includes(book.id));
+      const readBookIds = this.userBooks.filter((ub) => ub.status === 'read').map((ub) => ub.bookId.toString());
+      const readBooks = books.filter((book) => readBookIds.includes(book.id.toString()));
 
       const genreCounts: { [key: string]: number } = {};
       readBooks.forEach((book) => {
@@ -103,14 +101,16 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
           const monthIndex = new Date(ub.dateFinished!).getMonth();
           this.monthlyProgress[monthIndex].books += 1;
         });
-      this.isLoading = false;
+
       setTimeout(() => {
         this.initGenreChart();
         this.initMonthlyChart();
       }, 0);
     } catch (err) {
       console.error('Error loading reading stats:', err);
+    } finally {
       this.isLoading = false;
+      this.cdr.detectChanges();
     }
   }
 

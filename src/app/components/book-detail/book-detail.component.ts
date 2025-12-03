@@ -1,14 +1,14 @@
 // book-detail.component.ts
-import { Component, OnInit } from "@angular/core"
-import { CommonModule } from "@angular/common"
-import { FormsModule } from "@angular/forms"
-import { ActivatedRoute, Router, RouterModule } from "@angular/router"
-import { Book } from "../../domain/book"
-import { BookService } from "../../application/book.service"
-import { ReadingSession } from '../../domain/reading-session';
-import { ReadingSessionService } from "../../services/reading-session.service"
-import { BookReviewComponent } from "../book-review/book-review.component"
-import { UserBook } from '../../domain/user-book';
+import {ChangeDetectorRef, Component, OnInit} from "@angular/core"
+import {CommonModule} from "@angular/common"
+import {FormsModule} from "@angular/forms"
+import {ActivatedRoute, Router, RouterModule} from "@angular/router"
+import {Book} from "../../domain/book"
+import {BookService} from "../../application/book.service"
+import {ReadingSession} from '../../domain/reading-session';
+import {ReadingSessionService} from "../../services/reading-session.service"
+import {BookReviewComponent} from "../book-review/book-review.component"
+import {UserBook} from '../../domain/user-book';
 
 @Component({
   selector: "app-book-detail",
@@ -23,6 +23,7 @@ export class BookDetailComponent implements OnInit {
   currentUserId = 1 // Hard-coded for demo
   userRating = 0
   userReview = ""
+  isLoading = true
 
   // Progress tracking
   progressTrackerOpen = false
@@ -35,6 +36,7 @@ export class BookDetailComponent implements OnInit {
     private router: Router,
     private bookService: BookService,
     private readingSessionService: ReadingSessionService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -48,10 +50,13 @@ export class BookDetailComponent implements OnInit {
   }
 
   async loadBookDetails(): Promise<void> {
+    this.isLoading = true;
+    this.cdr.detectChanges();
+    console.log('Loading book details for ID:', this.bookId);
     try {
       this.book = await this.bookService.getBookById(this.bookId) || null;
       const userBooks = await this.bookService.getUserBooks(this.currentUserId);
-      const userBook = userBooks.find((ub) => ub.bookId === this.bookId);
+      const userBook = userBooks.find((ub) => ub.bookId.toString() === this.bookId);
       if (userBook) {
         this.userBook = userBook;
         this.userRating = userBook.rating || 0;
@@ -59,6 +64,9 @@ export class BookDetailComponent implements OnInit {
       }
     } catch (err) {
       console.error("Error loading book details:", err);
+    } finally {
+      this.isLoading = false;
+      this.cdr.detectChanges();
     }
   }
 
@@ -74,11 +82,13 @@ export class BookDetailComponent implements OnInit {
       };
       this.userBook = await this.bookService.addBookToLibrary(newUserBook);
     }
+    this.cdr.detectChanges();
   }
 
   async submitReview(): Promise<void> {
     if (this.userBook && this.userRating > 0) {
       this.userBook = await this.bookService.addReview(this.userBook.id, this.userRating, this.userReview);
+      this.cdr.detectChanges();
     }
   }
 
@@ -98,8 +108,7 @@ export class BookDetailComponent implements OnInit {
         if (sessions.length > 0) {
           const sortedSessions = [...sessions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
           const lastSession = sortedSessions[0];
-          const totalPagesRead = sessions.reduce((sum, session) => sum + session.pagesRead, 0);
-          this.currentPage = totalPagesRead;
+          this.currentPage = sessions.reduce((sum, session) => sum + session.pagesRead, 0);
         } else {
           this.currentPage = 0;
         }

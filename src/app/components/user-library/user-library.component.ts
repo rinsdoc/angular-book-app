@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core"
+import {ChangeDetectorRef, Component, OnInit} from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { FormsModule } from "@angular/forms"
 import { RouterModule } from "@angular/router"
@@ -18,17 +18,30 @@ export class UserLibraryComponent implements OnInit {
   books: Book[] = []
   currentUserId = 1
   activeTab: "all" | "reading" | "toRead" | "read" = "all"
+  isLoading = true
 
-  constructor(private bookService: BookService) {}
+  constructor(
+    private bookService: BookService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadUserBooks()
   }
 
   async loadUserBooks(): Promise<void> {
-    this.userBooks = await this.bookService.getUserBooks(this.currentUserId)
-    this.books = await this.bookService.getBooks()
-    this.filterByTab(this.activeTab)
+    this.isLoading = true
+    this.cdr.detectChanges()
+    try {
+      this.userBooks = await this.bookService.getUserBooks(this.currentUserId)
+      this.books = await this.bookService.getBooks()
+      this.filterByTab(this.activeTab)
+    } catch (err) {
+      console.error("Error loading user books:", err)
+    } finally {
+      this.isLoading = false
+      this.cdr.detectChanges()
+    }
   }
 
   filterByTab(tab: "all" | "reading" | "toRead" | "read"): void {
@@ -59,6 +72,6 @@ export class UserLibraryComponent implements OnInit {
   }
 
   getBookDetails(userBook: UserBook): Book | undefined {
-    return this.books.find((book) => book.id === userBook.bookId)
+    return this.books.find((book) => book.id.toString() === userBook.bookId.toString())
   }
 }
