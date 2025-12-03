@@ -52,7 +52,6 @@ export class BookDetailComponent implements OnInit {
   async loadBookDetails(): Promise<void> {
     this.isLoading = true;
     this.cdr.detectChanges();
-    console.log('Loading book details for ID:', this.bookId);
     try {
       this.book = await this.bookService.getBookById(this.bookId) || null;
       const userBooks = await this.bookService.getUserBooks(this.currentUserId);
@@ -100,6 +99,13 @@ export class BookDetailComponent implements OnInit {
     this.router.navigate(["/discover"])
   }
 
+  // Helper to expose numeric book id to child components
+  get bookIdNumber(): number {
+    if (!this.book) return 0;
+    const id: any = (this.book as any).id;
+    return typeof id === 'string' ? parseInt(id, 10) || 0 : id || 0;
+  }
+
   // Progress tracking methods
   openProgressTracker(): void {
     this.progressTrackerOpen = true;
@@ -107,7 +113,6 @@ export class BookDetailComponent implements OnInit {
       this.readingSessionService.getSessionsByUserBookId(this.userBook.id).then((sessions: ReadingSession[]) => {
         if (sessions.length > 0) {
           const sortedSessions = [...sessions].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-          const lastSession = sortedSessions[0];
           this.currentPage = sessions.reduce((sum, session) => sum + session.pagesRead, 0);
         } else {
           this.currentPage = 0;
@@ -126,33 +131,49 @@ export class BookDetailComponent implements OnInit {
     if (!this.userBook || !this.book) {
       return;
     }
+
     if (this.currentPage <= 0 || this.minutesRead <= 0) {
       this.readingSessionService.error.set("Please enter valid page count and reading time.");
       return;
     }
+
     if (this.currentPage > this.book.pages) {
       this.readingSessionService.error.set(`This book only has ${this.book.pages} pages.`);
       return;
     }
+
     const newSession: Omit<ReadingSession, "id"> = {
       userBookId: this.userBook.id,
       date: new Date().toISOString().split("T")[0],
       pagesRead: this.currentPage,
       minutes: this.minutesRead,
-      notes: this.readingNotes,
+      notes: this.readingNotes || undefined,
     };
+
     try {
       await this.readingSessionService.addSession(newSession);
-      if (this.book && this.currentPage >= this.book.pages) {
-        await this.updateBookStatus("read");
-      }
-      this.closeProgressTracker();
-    } catch (err) {
-      // Error is manejado por el servicio
-    }
-  }
 
-  get bookIdNumber(): number {
-    return typeof this.book?.id === 'string' ? parseInt(this.book.id, 10) : (this.book?.id ?? 0);
+      // If the user reached the end of the book, mark it as finished
+      if (this.currentPage === this.book.pages) {
+        this.userBook.dateFinished = new Date().toISOString().split("T")[0];
+        this.userBook.status = "read";
+        // Update repository via application BookService (returns a Promise)
+        try {
+          await this.bookService.updateBookStatus(this.userBook.id, "read");
+        } catch (e) {
+          // non-fatal: keep UI updated but log the error
+          console.error("Failed to update user book status after finishing:", e);
+        }
+      }
+
+      // Reset tracker UI
+      this.minutesRead = 0;
+      this.readingNotes = "";
+      this.progressTrackerOpen = false;
+      this.cdr.detectChanges();
+    } catch (err) {
+      this.readingSessionService.error.set("Failed to save reading session. Please try again.");
+      console.error("Error saving reading session:", err);
+    }
   }
 }

@@ -50,10 +50,9 @@ export class BookReviewComponent implements OnInit {
   }
 
   getReviewsForBook(bookId: number): Observable<Review[]> {
-    console.log(`Fetching reviews from ${this.reviewsUrl} for book ${bookId}`)
     return this.http.get<Review[]>(this.reviewsUrl).pipe(
       map((reviews) => reviews.filter((review) => review.bookId === bookId)),
-      tap((reviews) => console.log(`Found ${reviews.length} reviews for book ${bookId}:`, reviews)),
+      tap((reviews) => {}),
       catchError((err) => {
         console.error(`Error fetching reviews for book ${bookId}:`, err)
         return of([])
@@ -65,4 +64,3 @@ export class BookReviewComponent implements OnInit {
     return "★".repeat(rating) + "☆".repeat(5 - rating)
   }
 }
-

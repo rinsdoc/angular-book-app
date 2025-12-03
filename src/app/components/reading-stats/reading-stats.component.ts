@@ -1,9 +1,9 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, ChangeDetectorRef } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { BookService } from "../../application/book.service";
-import { ReadingSessionService } from "../../services/reading-session.service";
-import { Book } from '../../domain/book';
-import { UserBook } from '../../domain/user-book';
+import {Component, OnInit, AfterViewInit, ElementRef, ViewChild, ChangeDetectorRef} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {BookService} from "../../application/book.service";
+import {ReadingSessionService} from "../../services/reading-session.service";
+import {Book} from '../../domain/book';
+import {UserBook} from '../../domain/user-book';
 
 @Component({
   selector: "app-reading-stats",
@@ -44,7 +44,8 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
     private bookService: BookService,
     private readingSessionService: ReadingSessionService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadReadingStats()
@@ -60,8 +61,6 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
     try {
       const books = await this.bookService.getBooks();
       this.books = books;
-      console.log('Books loaded:', books.length);
-
       this.userBooks = await this.bookService.getUserBooks(this.currentUserId);
 
       const sessions = await this.readingSessionService.getSessionsByUserId(this.currentUserId);
@@ -77,7 +76,7 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
         });
       });
       this.genreDistribution = Object.entries(genreCounts)
-        .map(([name, value]) => ({ name, value }))
+        .map(([name, value]) => ({name, value}))
         .sort((a, b) => b.value - a.value);
 
       const year = new Date().getFullYear().toString();
@@ -90,7 +89,7 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
       this.readingTimeThisYear = readSessionsThisYear.reduce((sum: number, s: any) => sum + s.minutes, 0);
 
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      this.monthlyProgress = months.map((month) => ({ month, books: 0, pages: 0 }));
+      this.monthlyProgress = months.map((month) => ({month, books: 0, pages: 0}));
       readSessionsThisYear.forEach((session: any) => {
         const monthIndex = new Date(session.date).getMonth();
         this.monthlyProgress[monthIndex].pages += session.pagesRead;
@@ -116,9 +115,9 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
 
   getBestReadingMonth() {
     if (!this.monthlyProgress || this.monthlyProgress.length === 0) {
-      return { month: "No data available", books: 0 }
+      return {month: "No data available", books: 0}
     }
-    return this.monthlyProgress.reduce((max, month) => (month.books > max.books ? month : max), { month: "", books: 0 })
+    return this.monthlyProgress.reduce((max, month) => (month.books > max.books ? month : max), {month: "", books: 0})
   }
 
   initGenreChart(): void {
