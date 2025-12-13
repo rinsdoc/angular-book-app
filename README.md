@@ -4,7 +4,7 @@ A modern application to manage your book collection, developed with Angular 21.0
 It offers advanced features such as genre search, personalized reading statistics, and reading goal management. 
 Built with Angular, TailwindCSS, and RxJS, it presents an elegant interface with light/dark theme support, subtle animations, and a fully responsive design that ensures an optimal experience on any device.
 
-![BookTracker Screenshot](src/assets/booktracker-screenshot.png)
+![BookTracker Screenshot](src/assets/booktracker-screenshots.png)
 
 ## Table of Contents
 
