@@ -1,7 +1,7 @@
 ![BookTracker Logo](src/assets/booktracker-logo.png)
 
 A modern application to manage your book collection, developed with Angular 21.0.2. BookTracker allows you to discover new titles, track your reading progress, and organize your digital library efficiently.
-It offers advanced features such as genre search, personalized reading statistics, and reading goal management.
+It offers advanced features such as genre search, personalized reading statistics, and reading goal management. 
 Built with Angular, TailwindCSS, and RxJS, it presents an elegant interface with light/dark theme support, subtle animations, and a fully responsive design that ensures an optimal experience on any device.
 
 ![BookTracker Screenshot](src/assets/booktracker-screenshot.png)
