@@ -1,7 +1,7 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-  <h2 class="text-2xl sm:text-3xl font-bold mb-8 pb-2 relative">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-2">
+  <h2 class="section-title">
     Reading Statistics
-    <span class="absolute bottom-0 left-0 w-16 h-1 bg-gradient-to-r from-primary to-primary-light"></span>
+    <span class="section-title-underline"></span>
   </h2>
 
   <!-- Loading State -->
@@ -16,40 +16,37 @@
     <!-- Stats Summary Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
       <!-- Books Read Card -->
-      <div class="bg-card-light dark:bg-card-dark rounded-xl p-8 text-center shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary-light"></div>
+      <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md relative overflow-hidden p-8 text-center">
         <div class="text-4xl mb-4">📚</div>
         <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-2">
           {{ totalBooksRead }}
         </h3>
-        <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg font-medium">Books Read</p>
+        <p class="text-muted-foreground text-lg font-medium">Books Read</p>
       </div>
 
       <!-- Pages Read Card -->
-      <div class="bg-card-light dark:bg-card-dark rounded-xl p-8 text-center shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary-light"></div>
+      <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md relative overflow-hidden p-8 text-center">
         <div class="text-4xl mb-4">📄</div>
         <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-2">
           {{ pagesReadThisYear }}
         </h3>
-        <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg font-medium">Pages This Year</p>
+        <p class="text-muted-foreground text-lg font-medium">Pages This Year</p>
       </div>
 
       <!-- Reading Time Card -->
-      <div class="bg-card-light dark:bg-card-dark rounded-xl p-8 text-center shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary-light"></div>
+      <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md relative overflow-hidden p-8 text-center">
         <div class="text-4xl mb-4">⏱️</div>
         <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-2">
           {{ (readingTimeThisYear / 60).toFixed(1) }}
         </h3>
-        <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg font-medium">Hours Reading</p>
+        <p class="text-muted-foreground text-lg font-medium">Hours Reading</p>
       </div>
     </div>
 
     <!-- Charts Section -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
       <!-- Genre Chart -->
-      <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark">
+      <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm p-6">
         <h3 class="text-xl font-semibold mb-6 text-center pb-2 relative">
           Genres Read
           <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-10 h-0.5 bg-primary"></span>
@@ -75,7 +72,7 @@
       </div>
 
       <!-- Monthly Progress Chart -->
-      <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark">
+      <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm p-6">
         <h3 class="text-xl font-semibold mb-6 text-center pb-2 relative">
           Monthly Progress
           <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-10 h-0.5 bg-primary"></span>
@@ -108,68 +105,68 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Most Read Genre -->
-        <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1">
-          <h4 class="text-lg font-medium mb-4 text-text-primary-light dark:text-text-primary-dark">Most Read Genre</h4>
+        <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md p-6">
+          <h4 class="text-lg font-medium mb-4 text-foreground">Most Read Genre</h4>
           @if (genreDistribution.length > 0) {
             <p class="text-primary text-xl font-semibold">
               {{ genreDistribution[0].name }}
-              <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
+              <span class="block text-sm font-normal text-muted-foreground mt-1">
                 {{ genreDistribution[0].value }} books
               </span>
             </p>
           } @else {
-            <p class="text-text-secondary-light dark:text-text-secondary-dark">
+            <p class="text-muted-foreground">
               No data available
             </p>
           }
         </div>
 
         <!-- Average Reading Time -->
-        <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1">
-          <h4 class="text-lg font-medium mb-4 text-text-primary-light dark:text-text-primary-dark">Average Reading Time</h4>
+        <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md p-6">
+          <h4 class="text-lg font-medium mb-4 text-foreground">Average Reading Time</h4>
           @if (totalBooksRead > 0) {
             <p class="text-primary text-xl font-semibold">
               {{ (readingTimeThisYear / totalBooksRead / 60).toFixed(1) }}
-              <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
+              <span class="block text-sm font-normal text-muted-foreground mt-1">
                 hours per book
               </span>
             </p>
           } @else {
-            <p class="text-text-secondary-light dark:text-text-secondary-dark">
+            <p class="text-muted-foreground">
               No data available
             </p>
           }
         </div>
 
         <!-- Reading Pace -->
-        <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1">
-          <h4 class="text-lg font-medium mb-4 text-text-primary-light dark:text-text-primary-dark">Reading Pace</h4>
+        <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md p-6">
+          <h4 class="text-lg font-medium mb-4 text-foreground">Reading Pace</h4>
           @if (readingTimeThisYear > 0) {
             <p class="text-primary text-xl font-semibold">
               {{ (pagesReadThisYear / (readingTimeThisYear / 60)).toFixed(1) }}
-              <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
+              <span class="block text-sm font-normal text-muted-foreground mt-1">
                 pages per hour
               </span>
             </p>
           } @else {
-            <p class="text-text-secondary-light dark:text-text-secondary-dark">
+            <p class="text-muted-foreground">
               No data available
             </p>
           }
         </div>
 
         <!-- Best Reading Month -->
-        <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark transition-all hover:-translate-y-1">
-          <h4 class="text-lg font-medium mb-4 text-text-primary-light dark:text-text-primary-dark">Best Reading Month</h4>
+        <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md p-6">
+          <h4 class="text-lg font-medium mb-4 text-foreground">Best Reading Month</h4>
           @if (getBestReadingMonth().books > 0) {
             <p class="text-primary text-xl font-semibold">
               {{ getBestReadingMonth().month }}
-              <span class="block text-sm font-normal text-text-secondary-light dark:text-text-secondary-dark mt-1">
+              <span class="block text-sm font-normal text-muted-foreground mt-1">
                 {{ getBestReadingMonth().books }} books
               </span>
             </p>
           } @else {
-            <p class="text-text-secondary-light dark:text-text-secondary-dark">
+            <p class="text-muted-foreground">
               No data available
             </p>
           }

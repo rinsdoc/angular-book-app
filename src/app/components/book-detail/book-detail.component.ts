@@ -9,12 +9,15 @@ import {ReadingSession} from '../../domain/reading-session';
 import {ReadingSessionService} from "../../services/reading-session.service"
 import {BookReviewComponent} from "../book-review/book-review.component"
 import {UserBook} from '../../domain/user-book';
+import {NgIcon, provideIcons} from '@ng-icons/core';
+import {lucideX} from '@ng-icons/lucide';
 
 @Component({
   selector: "app-book-detail",
   templateUrl: "./book-detail.component.html",
   styleUrls: ["./book-detail.component.css"],
-  imports: [CommonModule, FormsModule, RouterModule, BookReviewComponent],
+  imports: [CommonModule, FormsModule, RouterModule, BookReviewComponent, NgIcon],
+  providers: [provideIcons({lucideX})],
 })
 export class BookDetailComponent implements OnInit {
   bookId = ""
@@ -37,7 +40,8 @@ export class BookDetailComponent implements OnInit {
     private bookService: BookService,
     private readingSessionService: ReadingSessionService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {

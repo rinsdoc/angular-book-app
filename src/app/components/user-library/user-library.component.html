@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-2">
   <h2 class="section-title">
     My Library
     <span class="section-title-underline"></span>
@@ -50,100 +50,101 @@
   <!-- Library Books List -->
   @if (!isLoading) {
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div
-      *ngFor="let userBook of filteredBooks"
-      class="bg-card-light dark:bg-card-dark rounded-2xl overflow-hidden shadow-lg dark:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-gray-100 dark:border-gray-800"
-    >
-      <div class="flex flex-col sm:flex-row">
-        <!-- Book Cover with improved styling -->
-        <div class="w-full sm:w-[140px] h-[200px] flex-shrink-0 relative overflow-hidden sm:rounded-br-3xl">
-          <img
-            [src]="getBookDetails(userBook)?.cover || 'assets/default-cover.jpg'"
-            [alt]="getBookDetails(userBook)?.title"
-            class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+      @for (userBook of filteredBooks; track userBook) {
+        <div
+          class="bg-card-light dark:bg-card-dark rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 border border-gray-200 dark:border-gray-800"
+        >
+          <div class="flex flex-col sm:flex-row">
+            <!-- Book Cover with improved styling -->
+            <div class="w-full sm:w-[140px] h-[200px] flex-shrink-0 relative overflow-hidden sm:rounded-br-3xl">
+              <img
+                [src]="getBookDetails(userBook)?.cover || 'assets/default-cover.jpg'"
+                [alt]="getBookDetails(userBook)?.title"
+                class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
-          <!-- Reading status badge -->
-          <div class="absolute bottom-3 left-3">
-          @if (userBook.status === 'currently-reading') {
-            <span class="bg-gray-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-              Reading
-            </span>
-          }
-          @if (userBook.status === 'read') {
-            <span class="bg-green-600/90 text-white text-xs px-2 py-1 rounded-full font-medium">
-              Read
-            </span>
-          }
-          @if (userBook.status === 'want-to-read') {
-            <span class="bg-amber-500/90 text-white text-xs px-2 py-1 rounded-full font-medium">
-              Want to read
-            </span>
-          }
-          </div>
-        </div>
-
-        <!-- Book Details -->
-        <div class="p-5 flex flex-col flex-1">
-          <h3 class="text-xl font-bold mb-1 line-clamp-2">{{ getBookDetails(userBook)?.title || 'No title' }}</h3>
-          <p class="text-text-secondary-light dark:text-text-secondary-dark mb-4 text-sm">
-            author: <span class="italic">{{ getBookDetails(userBook)?.author || 'Unknown author' }}</span>
-          </p>
-
-          <!-- Status Control -->
-          <div class="mb-4 relative">
-            <label class="text-xs text-text-secondary-light dark:text-text-secondary-dark mb-1 block">Reading status</label>
-            <select
-              [ngModel]="userBook.status"
-              (ngModelChange)="updateStatus(userBook.id, $event)"
-              class="input-primary max-w-full w-full py-2 pl-3 pr-8 appearance-none bg-background-light dark:bg-background-dark border border-gray-200 dark:border-gray-700 rounded-lg"
-            >
-              <option value="want-to-read">Want to read</option>
-              <option value="currently-reading">Currently Reading</option>
-              <option value="read">Read</option>
-            </select>
-            <div class="absolute right-2 top-[calc(50%+8px)] pointer-events-none text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-              </svg>
-            </div>
-          </div>
-
-          <!-- Book Meta Info -->
-          @if (userBook.status === 'read') {
-            <div class="mb-4 bg-primary/5 dark:bg-primary/10 p-3 rounded-lg">
-              @if (userBook.rating) {
-                <div class="font-medium mb-2 flex items-center">
-                  <span class="text-amber-500 flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                      <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                    </svg>
-                    Your rating: {{ userBook.rating }}
+              <!-- Reading status badge -->
+              <div class="absolute bottom-3 left-3">
+                @if (userBook.status === 'currently-reading') {
+                  <span class="bg-gray-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                    Reading
                   </span>
-                </div>
-              }
-              @if (userBook.dateStarted && userBook.dateFinished) {
-                <div class="text-xs text-text-secondary-light dark:text-text-secondary-dark">
-                  <span>Read from {{ userBook.dateStarted | date:'dd/MM/yyyy' }} to {{ userBook.dateFinished | date:'dd/MM/yyyy' }}</span>
-                </div>
-              }
+                }
+                @if (userBook.status === 'read') {
+                  <span class="bg-green-600/90 text-white text-xs px-2 py-1 rounded-full font-medium">
+                    Read
+                  </span>
+                }
+                @if (userBook.status === 'want-to-read') {
+                  <span class="bg-amber-500/90 text-white text-xs px-2 py-1 rounded-full font-medium">
+                    Want to read
+                  </span>
+                }
+              </div>
             </div>
-          }
 
-          <!-- View Details Button -->
-          <a
-            [routerLink]="['/books', userBook.bookId]"
-            class="self-start mt-auto btn-primary flex items-center gap-2 px-4 py-2 rounded-lg"
-          >
-            View details
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-            </svg>
-          </a>
+            <!-- Book Details -->
+            <div class="p-5 flex flex-col flex-1">
+              <h3 class="text-xl font-bold mb-1 line-clamp-2">{{ getBookDetails(userBook)?.title || 'No title' }}</h3>
+              <p class="text-text-secondary-light dark:text-text-secondary-dark mb-4 text-sm">
+                author: <span class="italic">{{ getBookDetails(userBook)?.author || 'Unknown author' }}</span>
+              </p>
+
+              <!-- Status Control -->
+              <div class="mb-4 relative">
+                <label class="text-xs text-text-secondary-light dark:text-text-secondary-dark mb-1 block">Reading status</label>
+                <select
+                  [ngModel]="userBook.status"
+                  (ngModelChange)="updateStatus(userBook.id, $event)"
+                  class="input-primary max-w-full w-full py-2 pl-3 pr-8 appearance-none bg-background border border-gray-200 dark:border-gray-700 rounded-lg"
+                >
+                  <option value="want-to-read">Want to read</option>
+                  <option value="currently-reading">Currently Reading</option>
+                  <option value="read">Read</option>
+                </select>
+                <div class="absolute right-2 top-[calc(50%+8px)] pointer-events-none text-gray-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Book Meta Info -->
+              @if (userBook.status === 'read') {
+                <div class="mb-4 bg-primary/5 dark:bg-primary/10 p-3 rounded-lg">
+                  @if (userBook.rating) {
+                    <div class="font-medium mb-2 flex items-center">
+                      <span class="text-amber-500 flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                          <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                        Your rating: {{ userBook.rating }}
+                      </span>
+                    </div>
+                  }
+                  @if (userBook.dateStarted && userBook.dateFinished) {
+                    <div class="text-xs text-text-secondary-light dark:text-text-secondary-dark">
+                      <span>Read from {{ userBook.dateStarted | date:'dd/MM/yyyy' }} to {{ userBook.dateFinished | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- View Details Button -->
+              <a
+                [routerLink]="['/books', userBook.bookId]"
+                class="self-start mt-auto btn-primary flex items-center gap-2 px-4 py-2 rounded-lg"
+              >
+                View details
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      }
     </div>
   }
 </div>

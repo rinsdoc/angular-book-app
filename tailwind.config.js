@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Poppins", "sans-serif"],
+        sans: ["Inter", "sans-serif"],
       },
       borderWidth: {
         '3': '3px',
@@ -48,8 +48,7 @@ module.exports = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          light: "#9d46ff",
-          dark: "#0a00b6",
+          light: "hsl(var(--primary) / 0.8)",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -74,25 +73,13 @@ module.exports = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-          light: "#ffffff",
-          dark: "#1e1e1e",
         },
-        text: {
-          primary: {
-            light: "#212121",
-            dark: "#e1e1e1",
-          },
-          secondary: {
-            light: "#757575",
-            dark: "#a0a0a0",
-          },
-        },
-        borderRadius: {
-          lg: "var(--radius)",
-          md: "calc(var(--radius) - 2px)",
-          sm: "calc(var(--radius) - 4px)",
-        },
-      }
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
     },
     plugins: [],
   }
