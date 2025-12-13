@@ -30,23 +30,24 @@
     <!-- Reviews List -->
     @if (reviews.length > 0) {
       <div class="space-y-6">
-        <div
-          *ngFor="let review of reviews"
-          class="bg-primary/5 rounded-lg p-6 transition-all hover:bg-primary/10"
-        >
-          <div class="flex justify-between mb-4">
-            <div>
-              <span class="font-semibold text-foreground block">{{ review.username }}</span>
-              <span class="text-sm text-muted-foreground">{{ review.date | date:'mediumDate' }}</span>
+        @for (review of reviews; track review) {
+          <div
+            class="bg-primary/5 rounded-lg p-6 transition-all hover:bg-primary/10"
+          >
+            <div class="flex justify-between mb-4">
+              <div>
+                <span class="font-semibold text-foreground block">{{ review.username }}</span>
+                <span class="text-sm text-muted-foreground">{{ review.date | date:'mediumDate' }}</span>
+              </div>
+              <div class="text-amber-500 text-xl tracking-wider">
+                {{ getStarRating(review.rating) }}
+              </div>
             </div>
-            <div class="text-amber-500 text-xl tracking-wider">
-              {{ getStarRating(review.rating) }}
+            <div class="text-foreground leading-relaxed">
+              <p>{{ review.reviewText }}</p>
             </div>
           </div>
-          <div class="text-foreground leading-relaxed">
-            <p>{{ review.reviewText }}</p>
-          </div>
-        </div>
+        }
       </div>
     }
   }

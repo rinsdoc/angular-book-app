@@ -8,8 +8,9 @@
 }
 
 .main-header {
-  background-color: hsl(var(--card));
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  background-color: hsl(var(--background) / 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid hsl(var(--border));
   padding: 1rem 0;
   position: sticky;
   top: 0;
@@ -124,10 +125,10 @@ main {
 }
 
 .main-footer {
-  background-color: hsl(var(--card));
+  background-color: hsl(var(--background));
+  border-top: 1px solid hsl(var(--border));
   padding: 2rem 0;
   margin-top: auto;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .footer-content {

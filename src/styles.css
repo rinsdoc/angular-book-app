@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 /* PrimeNG Styles */
 @import "primeicons/primeicons.css";
@@ -35,6 +35,8 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --transition: all 0.3s ease;
+    --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
 
   .dark {
@@ -122,33 +124,26 @@
 
   /* Form inputs */
   .input-primary {
-    @apply w-full p-3 rounded-lg border border-primary/20 bg-card text-foreground focus:border-primary focus:ring focus:ring-primary/20 transition-all;
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   /* Buttons */
   .btn-primary {
-    @apply py-2 px-6 bg-primary hover:bg-primary-light text-white font-medium rounded-lg transition-all hover:-translate-y-0.5 hover:shadow-md;
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2;
   }
 
   /* Tab buttons */
   .tab-button {
-    @apply flex-1 py-4 px-2 font-semibold
-    text-primary bg-primary/10 border-b-3 border-transparent
-    hover:bg-primary/20
-    dark:text-muted-foreground dark:bg-primary/10 dark:border-transparent
-    dark:hover:bg-primary/20;
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm;
   }
 
   .tab-button-active {
-    @apply text-primary-foreground border-primary bg-primary
-    hover:bg-primary/90
-    dark:border-primary dark:bg-primary
-    dark:hover:text-primary-foreground;
+    @apply bg-background text-foreground shadow-sm;
   }
 
   /* Book cards */
   .book-card {
-    @apply bg-card text-card-foreground rounded-xl overflow-hidden flex flex-col shadow-card dark:shadow-card-dark transition-all hover:-translate-y-2 hover:rotate-1 hover:shadow-xl;
+    @apply rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md flex flex-col overflow-hidden;
   }
 
   .book-cover {
@@ -188,15 +183,14 @@
   }
 
   .book-action {
-    @apply mt-auto text-center py-3 bg-gradient-to-r from-primary to-primary-light text-white font-medium rounded-lg transition-all hover:shadow-md relative overflow-hidden;
+    @apply mt-auto inline-flex items-center justify-center w-full py-3 bg-primary text-primary-foreground font-medium rounded-lg transition-colors hover:bg-primary/90;
+    text-decoration: none !important;
+    color: hsl(var(--primary-foreground)) !important;
   }
 
-  .book-action-overlay {
-    @apply absolute inset-0 bg-gradient-to-r from-primary-light to-primary -translate-x-full transition-transform duration-300 ease-out;
-  }
-
-  .book-action.group:hover .book-action-overlay {
-    @apply translate-x-0;
+  .book-action:hover {
+    color: hsl(var(--primary-foreground)) !important;
+    text-decoration: none !important;
   }
 }
 
@@ -219,7 +213,7 @@ h4 {
 
 button {
   cursor: pointer;
-  font-family: "Poppins", sans-serif;
+  font-family: "Inter", sans-serif;
   border: none;
   background-color: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
@@ -241,7 +235,7 @@ textarea {
   padding: 12px 16px;
   border: 1px solid hsl(var(--primary) / 0.2);
   border-radius: var(--radius);
-  font-family: "Poppins", sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 0.95rem;
   transition: var(--transition);
   background-color: hsl(var(--card));

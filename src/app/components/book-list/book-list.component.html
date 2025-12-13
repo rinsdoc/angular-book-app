@@ -18,17 +18,24 @@
           class="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-secondary-dark">🔍</span>
       </div>
 
-      <div class="w-full sm:w-[200px]">
+      <div class="w-full sm:w-[200px] relative">
         <select
           [(ngModel)]="selectedGenre"
           (change)="filterByGenre()"
-          class="input-primary appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236200ea%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[center_right_0.75rem] bg-[length:1rem]"
+          class="input-primary appearance-none pr-10 cursor-pointer"
         >
           <option value="">All Genres</option>
-          <option *ngFor="let genre of genres" [value]="genre">
-            {{ genre }}
-          </option>
+          @for (genre of genres; track genre) {
+            <option [value]="genre">
+              {{ genre }}
+            </option>
+          }
         </select>
+        <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m6 9 6 6 6-6"/>
+          </svg>
+        </div>
       </div>
     </div>
   </div>
@@ -47,7 +54,7 @@
       <!-- No Results -->
       @if (filteredBooks.length === 0) {
         <div
-          class="col-span-full bg-card-light dark:bg-card-dark rounded-xl p-8 text-center shadow-card dark:shadow-card-dark">
+          class="col-span-full bg-background rounded-xl p-8 text-center">
           <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg mb-6">No books found matching your
             criteria.</p>
           <button
@@ -87,10 +94,9 @@
 
             <a
               [routerLink]="['/books', book.id]"
-              class="book-action group"
+              class="book-action"
             >
-              <span class="relative z-10">View Details</span>
-              <span class="book-action-overlay"></span>
+              View Details
             </a>
           </div>
         </div>
