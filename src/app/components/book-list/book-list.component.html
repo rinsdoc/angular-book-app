@@ -1,38 +1,34 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-  <div class="mb-10">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-2">
+  <div class="flex flex-row relative overflow-hidden gap-3 items-center mb-10">
     <h2 class="section-title">
       Discover Books
       <span class="section-title-underline"></span>
     </h2>
 
-    <div class="bg-card-light dark:bg-card-dark rounded-xl p-6 shadow-card dark:shadow-card-dark mb-8 relative overflow-hidden">
-      <!-- Top gradient bar -->
-      <div class="card-gradient-top"></div>
+    <div class="flex flex-col sm:flex-row gap-4 mb-6 relative overflow-hidden w-full sm:w-auto sm:ml-auto">
+      <div class="relative flex-1">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (keyup)="searchBooks()"
+          placeholder="Search by title or author..."
+          class="input-primary pl-10"
+        />
+        <span
+          class="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-secondary-dark">🔍</span>
+      </div>
 
-      <div class="flex flex-col sm:flex-row gap-4">
-        <div class="relative flex-1">
-          <input
-            type="text"
-            [(ngModel)]="searchTerm"
-            (keyup)="searchBooks()"
-            placeholder="Search by title or author..."
-            class="input-primary pl-10"
-          />
-          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-secondary-dark">🔍</span>
-        </div>
-
-        <div class="w-full sm:w-[200px]">
-          <select
-            [(ngModel)]="selectedGenre"
-            (change)="filterByGenre()"
-            class="input-primary appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236200ea%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[center_right_0.75rem] bg-[length:1rem]"
-          >
-            <option value="">All Genres</option>
-            <option *ngFor="let genre of genres" [value]="genre">
-              {{ genre }}
-            </option>
-          </select>
-        </div>
+      <div class="w-full sm:w-[200px]">
+        <select
+          [(ngModel)]="selectedGenre"
+          (change)="filterByGenre()"
+          class="input-primary appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236200ea%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[center_right_0.75rem] bg-[length:1rem]"
+        >
+          <option value="">All Genres</option>
+          <option *ngFor="let genre of genres" [value]="genre">
+            {{ genre }}
+          </option>
+        </select>
       </div>
     </div>
   </div>
@@ -50,8 +46,10 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
       <!-- No Results -->
       @if (filteredBooks.length === 0) {
-        <div class="col-span-full bg-card-light dark:bg-card-dark rounded-xl p-8 text-center shadow-card dark:shadow-card-dark">
-          <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg mb-6">No books found matching your criteria.</p>
+        <div
+          class="col-span-full bg-card-light dark:bg-card-dark rounded-xl p-8 text-center shadow-card dark:shadow-card-dark">
+          <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg mb-6">No books found matching your
+            criteria.</p>
           <button
             (click)="resetFilters()"
             class="btn-primary"
@@ -72,7 +70,8 @@
           </div>
 
           <div class="book-info">
-            <div class="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+            <div
+              class="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
 
             <h3 class="book-title">{{ book.title }}</h3>
             <p class="book-author">by {{ book.author }}</p>

@@ -1,8 +1,5 @@
 /* Define custom properties */
-:root {
-  --primary: #3f51b5;
-  --primary-light: #7986cb;
-}
+
 
 /* Ensure chart containers are responsive */
 .chart-container {
@@ -35,7 +32,7 @@ canvas {
 
 /* Gradient text for stats */
 .bg-gradient-text {
-  background: linear-gradient(to right, var(--primary), var(--primary-light));
+  background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.8));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
