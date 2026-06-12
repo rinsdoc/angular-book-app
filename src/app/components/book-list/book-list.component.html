@@ -1,28 +1,37 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 py-2">
-  <div class="flex flex-row relative overflow-hidden gap-3 items-center mb-10">
-    <h2 class="section-title">
-      Discover Books
-      <span class="section-title-underline"></span>
-    </h2>
+<div class="max-w-7xl mx-auto px-4 sm:px-6">
+  <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-10">
+    <div>
+      <h2 class="section-title mb-1">
+        Discover Books
+        <span class="section-title-underline"></span>
+      </h2>
+      <p class="text-muted-foreground text-sm mt-3">Find your next great read.</p>
+    </div>
 
-    <div class="flex flex-col sm:flex-row gap-4 mb-6 relative overflow-hidden w-full sm:w-auto sm:ml-auto">
-      <div class="relative flex-1">
+    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto sm:ml-auto">
+      <div class="relative flex-1 sm:w-[280px]">
         <input
           type="text"
-          [(ngModel)]="searchTerm"
-          (keyup)="searchBooks()"
+          [value]="searchTerm"
+          (input)="onSearchInput(searchInput.value)"
+          #searchInput
           placeholder="Search by title or author..."
           class="input-primary pl-10"
         />
-        <span
-          class="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-secondary-dark">🔍</span>
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
+        </span>
       </div>
 
       <div class="w-full sm:w-[200px] relative">
         <select
-          [(ngModel)]="selectedGenre"
-          (change)="filterByGenre()"
-          class="input-primary appearance-none pr-10 cursor-pointer"
+          [value]="selectedGenre"
+          (change)="onGenreChange(genreSelect.value)"
+          #genreSelect
+          class="select-primary"
         >
           <option value="">All Genres</option>
           @for (genre of genres; track genre) {
@@ -44,52 +53,52 @@
   @if (isLoading) {
     <div class="flex flex-col items-center justify-center min-h-[300px]">
       <div class="loading-spinner"></div>
-      <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg">Loading books...</p>
+      <p class="text-muted-foreground text-lg">Loading books...</p>
     </div>
   }
 
   <!-- Book Grid -->
   @if (!isLoading) {
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <!-- No Results -->
       @if (filteredBooks.length === 0) {
-        <div
-          class="col-span-full bg-background rounded-xl p-8 text-center">
-          <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg mb-6">No books found matching your
-            criteria.</p>
-          <button
-            (click)="resetFilters()"
-            class="btn-primary"
-          >
+        <div class="col-span-full panel-card p-12 text-center">
+          <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>
+          </div>
+          <p class="text-muted-foreground text-lg mb-6">No books found matching your criteria.</p>
+          <button (click)="resetFilters()" class="btn-primary">
             Reset Filters
           </button>
         </div>
       }
       <!-- Book Cards -->
       @for (book of filteredBooks; track book) {
-        <div class="book-card">
+        <div class="book-card group">
           <div class="book-cover">
             <img
               [src]="book.cover"
               [alt]="book.title"
             />
             <div class="book-cover-overlay"></div>
+            <span class="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 text-xs font-semibold text-amber-400 backdrop-blur-sm">
+              ★ {{ book.avgRating.toFixed(1) }}
+            </span>
           </div>
 
           <div class="book-info">
-            <div
-              class="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
-
             <h3 class="book-title">{{ book.title }}</h3>
             <p class="book-author">by {{ book.author }}</p>
 
-            <div class="book-meta">
-              <span class="book-rating">
-                <span>★</span> {{ book.avgRating.toFixed(1) }}
-              </span>
-              <span class="book-genres">
-                {{ book.genres.join(", ") }}
-              </span>
+            <div class="flex flex-wrap gap-1.5 mb-5">
+              @for (genre of book.genres.slice(0, 2); track genre) {
+                <span class="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                  {{ genre }}
+                </span>
+              }
             </div>
 
             <a

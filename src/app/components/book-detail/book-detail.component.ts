@@ -1,7 +1,6 @@
 // book-detail.component.ts
 import {ChangeDetectorRef, Component, OnInit} from "@angular/core"
 import {CommonModule} from "@angular/common"
-import {FormsModule} from "@angular/forms"
 import {ActivatedRoute, Router, RouterModule} from "@angular/router"
 import {Book} from "../../domain/book"
 import {BookService} from "../../application/book.service"
@@ -9,15 +8,12 @@ import {ReadingSession} from '../../domain/reading-session';
 import {ReadingSessionService} from "../../application/reading-session.service"
 import {BookReviewComponent} from "../book-review/book-review.component"
 import {UserBook} from '../../domain/user-book';
-import {NgIcon, provideIcons} from '@ng-icons/core';
-import {lucideX} from '@ng-icons/lucide';
 
 @Component({
   selector: "app-book-detail",
   templateUrl: "./book-detail.component.html",
   styleUrls: ["./book-detail.component.css"],
-  imports: [CommonModule, FormsModule, RouterModule, BookReviewComponent, NgIcon],
-  providers: [provideIcons({lucideX})],
+  imports: [CommonModule, RouterModule, BookReviewComponent],
 })
 export class BookDetailComponent implements OnInit {
   bookId = ""
@@ -71,6 +67,10 @@ export class BookDetailComponent implements OnInit {
       this.isLoading = false;
       this.cdr.detectChanges();
     }
+  }
+
+  onStatusChange(status: string): void {
+    this.updateBookStatus(status as UserBook["status"])
   }
 
   async updateBookStatus(status: UserBook["status"]): Promise<void> {

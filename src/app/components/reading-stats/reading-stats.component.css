@@ -1,39 +1,48 @@
-/* Define custom properties */
-
-
-/* Ensure chart containers are responsive */
-.chart-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-/* Ensure canvas elements fill their containers */
-canvas {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-/* Responsive adjustments for mobile */
-@media (max-width: 768px) {
-  .chart-container {
-    min-height: 250px;
+/* Donut segments fade/scale in, staggered via inline animation-delay */
+@keyframes donut-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
-/* Custom shadow classes */
-.shadow-card {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+.donut-segment {
+  opacity: 0;
+  transform-origin: center;
+  animation: donut-in 0.5s ease-out forwards;
+  transition: stroke-width 0.2s ease;
 }
 
-.dark .shadow-card-dark {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+.donut-segment:hover {
+  stroke-width: 30;
 }
 
-/* Gradient text for stats */
-.bg-gradient-text {
-  background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.8));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* Line draws itself in (pathLength="1" normalizes the dash length) */
+@keyframes draw-line {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.chart-line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw-line 1.4s ease-out forwards;
+}
+
+/* Area gradient fades in beneath the line */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.chart-area {
+  opacity: 0;
+  animation: fade-in 1.2s ease-out 0.3s forwards;
 }

@@ -1,6 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit} from "@angular/core"
 import { CommonModule } from "@angular/common"
-import { FormsModule } from "@angular/forms"
 import { RouterModule } from "@angular/router"
 import { BookService } from "../../application/book.service"
 import { Book } from "../../domain/book"
@@ -9,7 +8,7 @@ import { Book } from "../../domain/book"
   selector: "app-book-list",
   templateUrl: "./book-list.component.html",
   styleUrls: ["./book-list.component.css"],
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, RouterModule],
 })
 export class BookListComponent implements OnInit {
   books: Book[] = []
@@ -45,11 +44,13 @@ export class BookListComponent implements OnInit {
     }
   }
 
-  searchBooks(): void {
+  onSearchInput(value: string): void {
+    this.searchTerm = value
     this.applyFilters()
   }
 
-  filterByGenre(): void {
+  onGenreChange(value: string): void {
+    this.selectedGenre = value
     this.applyFilters()
   }
 

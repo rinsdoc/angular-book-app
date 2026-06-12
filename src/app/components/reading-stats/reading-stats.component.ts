@@ -1,6 +1,31 @@
-import {Component, OnInit, AfterViewInit, ElementRef, ViewChild, ChangeDetectorRef} from "@angular/core";
+import {Component, OnInit, ChangeDetectorRef} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {ReadingSessionService} from "../../application/reading-session.service";
+
+interface GenreSegment {
+  name: string
+  value: number
+  percent: number
+  color: string
+  dashArray: string
+  dashOffset: number
+}
+
+interface ChartPoint {
+  x: number
+  y: number
+  month: string
+  books: number
+}
+
+interface MonthlyChart {
+  linePath: string
+  areaPath: string
+  points: ChartPoint[]
+  gridLines: number[]
+  baseY: number
+  maxBooks: number
+}
 
 @Component({
   selector: "app-reading-stats",
@@ -8,10 +33,7 @@ import {ReadingSessionService} from "../../application/reading-session.service";
   styleUrls: ["./reading-stats.component.css"],
   imports: [CommonModule],
 })
-export class ReadingStatsComponent implements OnInit, AfterViewInit {
-  @ViewChild("genreCanvas") genreCanvas!: ElementRef<HTMLCanvasElement>
-  @ViewChild("monthlyCanvas") monthlyCanvas!: ElementRef<HTMLCanvasElement>
-
+export class ReadingStatsComponent implements OnInit {
   currentUserId = 1 // Hard-coded for demo
   totalBooksRead = 0
   pagesReadThisYear = 0
@@ -21,18 +43,25 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
 
   isLoading = true
 
-  // Colors for charts
-  chartColors = [
-    "#6200ea",
-    "#9d46ff",
-    "#b39ddb",
-    "#7c4dff",
-    "#651fff",
-    "#6200ee",
-    "#9c27b0",
-    "#aa00ff",
-    "#d500f9",
-    "#e040fb",
+  // Donut chart geometry (genres)
+  readonly donutRadius = 70
+  readonly donutStrokeWidth = 26
+  readonly donutCircumference = 2 * Math.PI * this.donutRadius
+  genreSegments: GenreSegment[] = []
+  genreTotal = 0
+
+  // Line/area chart geometry (monthly progress)
+  monthlyChart: MonthlyChart = {linePath: "", areaPath: "", points: [], gridLines: [], baseY: 0, maxBooks: 0}
+  hasMonthlyData = false
+
+  // Vibrant palette that reads well in both light and dark themes
+  private readonly palette = [
+    "hsl(262 83% 60%)",
+    "hsl(199 89% 52%)",
+    "hsl(330 75% 60%)",
+    "hsl(160 60% 45%)",
+    "hsl(35 92% 55%)",
+    "hsl(280 65% 65%)",
   ]
 
   constructor(
@@ -43,10 +72,6 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadReadingStats()
-  }
-
-  ngAfterViewInit(): void {
-    // Charts will be initialized after data is loaded
   }
 
   async loadReadingStats(): Promise<void> {
@@ -60,10 +85,8 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
       this.genreDistribution = stats.genreDistribution;
       this.monthlyProgress = stats.monthlyProgress;
 
-      setTimeout(() => {
-        this.initGenreChart();
-        this.initMonthlyChart();
-      }, 0);
+      this.buildGenreDonut();
+      this.buildMonthlyChart();
     } catch (err) {
       console.error('Error loading reading stats:', err);
     } finally {
@@ -79,96 +102,63 @@ export class ReadingStatsComponent implements OnInit, AfterViewInit {
     return this.monthlyProgress.reduce((max, month) => (month.books > max.books ? month : max), {month: "", books: 0})
   }
 
-  initGenreChart(): void {
-    if (!this.genreCanvas) return
+  private buildGenreDonut(): void {
+    const top = this.genreDistribution.slice(0, 6)
+    this.genreTotal = top.reduce((sum, g) => sum + g.value, 0)
+    const total = this.genreTotal || 1
 
-    const ctx = this.genreCanvas.nativeElement.getContext("2d")
-    if (!ctx) return
-
-    // Limit to top 5 genres for better visualization
-    const topGenres = this.genreDistribution.slice(0, 5)
-
-    // Clear canvas
-    ctx.clearRect(0, 0, this.genreCanvas.nativeElement.width, this.genreCanvas.nativeElement.height)
-
-    const canvasWidth = this.genreCanvas.nativeElement.width
-    const barHeight = 30
-    const barGap = 15
-    const maxBarWidth = canvasWidth - 150 // Leave space for labels
-
-    // Find the maximum value for scaling
-    const maxValue = Math.max(...topGenres.map((g) => g.value), 1)
-
-    // Draw bars
-    topGenres.forEach((genre, index) => {
-      const y = index * (barHeight + barGap) + 20
-      const barWidth = (genre.value / maxValue) * maxBarWidth
-
-      // Draw genre name
-      ctx.fillStyle = "#666"
-      ctx.font = "14px Arial"
-      ctx.textAlign = "right"
-      ctx.fillText(genre.name, 100, y + barHeight / 2 + 5)
-
-      // Draw bar
-      ctx.fillStyle = this.chartColors[index % this.chartColors.length]
-      ctx.fillRect(120, y, barWidth, barHeight)
-
-      // Draw value
-      ctx.fillStyle = "#fff"
-      ctx.font = "bold 12px Arial"
-      ctx.textAlign = "center"
-      if (barWidth > 30) {
-        // Only draw text inside bar if there's enough space
-        ctx.fillText(genre.value.toString(), 120 + barWidth - 20, y + barHeight / 2 + 4)
-      } else {
-        ctx.fillStyle = "#333"
-        ctx.textAlign = "left"
-        ctx.fillText(genre.value.toString(), 120 + barWidth + 5, y + barHeight / 2 + 4)
+    let offset = 0
+    this.genreSegments = top.map((genre, index) => {
+      const fraction = genre.value / total
+      const length = fraction * this.donutCircumference
+      const segment: GenreSegment = {
+        name: genre.name,
+        value: genre.value,
+        percent: Math.round(fraction * 100),
+        color: this.palette[index % this.palette.length],
+        dashArray: `${length} ${this.donutCircumference - length}`,
+        dashOffset: -offset,
       }
+      offset += length
+      return segment
     })
   }
 
-  initMonthlyChart(): void {
-    if (!this.monthlyCanvas) return
+  private buildMonthlyChart(): void {
+    // viewBox: 0 0 620 240 (kept in sync with the template)
+    const width = 620
+    const height = 240
+    const padX = 14
+    const padTop = 18
+    const padBottom = 34
+    const innerW = width - padX * 2
+    const innerH = height - padTop - padBottom
+    const baseY = padTop + innerH
 
-    const ctx = this.monthlyCanvas.nativeElement.getContext("2d")
-    if (!ctx) return
+    const data = this.monthlyProgress
+    const n = data.length
+    this.hasMonthlyData = data.some((m) => m.books > 0)
+    const maxBooks = Math.max(...data.map((m) => m.books), 1)
+    const step = n > 1 ? innerW / (n - 1) : 0
 
-    // Clear canvas
-    ctx.clearRect(0, 0, this.monthlyCanvas.nativeElement.width, this.monthlyCanvas.nativeElement.height)
+    const points: ChartPoint[] = data.map((m, i) => ({
+      x: padX + i * step,
+      y: padTop + innerH - (m.books / maxBooks) * innerH,
+      month: m.month,
+      books: m.books,
+    }))
 
-    const canvasWidth = this.monthlyCanvas.nativeElement.width
-    const canvasHeight = this.monthlyCanvas.nativeElement.height
-    const barWidth = (canvasWidth - 60) / 12 // 12 months
-    const maxBarHeight = canvasHeight - 60 // Leave space for labels
+    const linePath = points
+      .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
+      .join(" ")
 
-    // Find the maximum value for scaling
-    const maxBooks = Math.max(...this.monthlyProgress.map((m) => m.books), 1)
+    const areaPath = points.length
+      ? `${linePath} L ${points[points.length - 1].x.toFixed(1)} ${baseY} L ${points[0].x.toFixed(1)} ${baseY} Z`
+      : ""
 
-    // Draw bars
-    this.monthlyProgress.forEach((month, index) => {
-      const x = index * barWidth + 40
-      const barHeight = (month.books / maxBooks) * maxBarHeight
-      const y = canvasHeight - barHeight - 30
+    // Three evenly spaced gridlines plus the baseline
+    const gridLines = [0, 1, 2, 3].map((i) => padTop + (innerH / 3) * i)
 
-      // Draw bar
-      ctx.fillStyle = this.chartColors[index % this.chartColors.length]
-      ctx.fillRect(x, y, barWidth - 10, barHeight || 1) // Ensure at least 1px height for empty months
-
-      // Draw month name
-      ctx.fillStyle = "#666"
-      ctx.font = "12px Arial"
-      ctx.textAlign = "center"
-      ctx.fillText(month.month, x + (barWidth - 10) / 2, canvasHeight - 10)
-
-      // Draw value if there are books read
-      if (month.books > 0) {
-        ctx.fillStyle = "#333"
-        ctx.font = "bold 12px Arial"
-        ctx.textAlign = "center"
-        ctx.fillText(month.books.toString(), x + (barWidth - 10) / 2, y - 5)
-      }
-    })
+    this.monthlyChart = {linePath, areaPath, points, gridLines, baseY, maxBooks}
   }
 }

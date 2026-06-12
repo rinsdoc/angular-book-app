@@ -1,6 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit} from "@angular/core"
 import { CommonModule } from "@angular/common"
-import { FormsModule } from "@angular/forms"
 import { RouterModule } from "@angular/router"
 import { BookService } from "../../application/book.service"
 import { UserBook } from "../../domain/user-book"
@@ -10,7 +9,7 @@ import { Book } from "../../domain/book"
   selector: "app-user-library",
   templateUrl: "./user-library.component.html",
   styleUrls: ["./user-library.component.css"],
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, RouterModule],
 })
 export class UserLibraryComponent implements OnInit {
   userBooks: UserBook[] = []
@@ -62,8 +61,8 @@ export class UserLibraryComponent implements OnInit {
     }
   }
 
-  async updateStatus(userBookId: number, newStatus: UserBook["status"]): Promise<void> {
-    const updated = await this.bookService.updateBookStatus(userBookId, newStatus)
+  async updateStatus(userBookId: number, newStatus: string): Promise<void> {
+    const updated = await this.bookService.updateBookStatus(userBookId, newStatus as UserBook["status"])
     const bookIndex = this.userBooks.findIndex((b) => b.id === userBookId)
     if (bookIndex !== -1) {
       this.userBooks[bookIndex].status = updated.status

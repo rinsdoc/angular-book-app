@@ -1,98 +1,161 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 py-2">
-  <h2 class="section-title">
-    Reading Statistics
-    <span class="section-title-underline"></span>
-  </h2>
+<div class="max-w-7xl mx-auto px-4 sm:px-6">
+  <div class="mb-8">
+    <h2 class="section-title mb-1">
+      Reading Statistics
+      <span class="section-title-underline"></span>
+    </h2>
+    <p class="text-muted-foreground text-sm mt-3">A look at your reading habits this year.</p>
+  </div>
 
   <!-- Loading State -->
   @if (isLoading) {
     <div class="flex flex-col items-center justify-center min-h-[400px]">
       <div class="loading-spinner"></div>
-      <p class="text-text-secondary-light dark:text-text-secondary-dark text-lg">Analyzing your reading data...</p>
+      <p class="text-muted-foreground text-lg">Analyzing your reading data...</p>
     </div>
   }
 
   @if (!isLoading) {
     <!-- Stats Summary Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
       <!-- Books Read Card -->
-      <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md relative overflow-hidden p-8 text-center">
-        <div class="text-4xl mb-4">📚</div>
-        <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-2">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+          </svg>
+        </div>
+        <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-1">
           {{ totalBooksRead }}
         </h3>
-        <p class="text-muted-foreground text-lg font-medium">Books Read</p>
+        <p class="text-muted-foreground font-medium">Books Read</p>
       </div>
 
       <!-- Pages Read Card -->
-      <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md relative overflow-hidden p-8 text-center">
-        <div class="text-4xl mb-4">📄</div>
-        <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-2">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5M8 13h8M8 17h5"/>
+          </svg>
+        </div>
+        <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-1">
           {{ pagesReadThisYear }}
         </h3>
-        <p class="text-muted-foreground text-lg font-medium">Pages This Year</p>
+        <p class="text-muted-foreground font-medium">Pages This Year</p>
       </div>
 
       <!-- Reading Time Card -->
-      <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md relative overflow-hidden p-8 text-center">
-        <div class="text-4xl mb-4">⏱️</div>
-        <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-2">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-1">
           {{ (readingTimeThisYear / 60).toFixed(1) }}
         </h3>
-        <p class="text-muted-foreground text-lg font-medium">Hours Reading</p>
+        <p class="text-muted-foreground font-medium">Hours Reading</p>
       </div>
     </div>
 
     <!-- Charts Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-      <!-- Genre Chart -->
-      <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm p-6">
-        <h3 class="text-xl font-semibold mb-6 text-center pb-2 relative">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+      <!-- Genre Donut Chart -->
+      <div class="panel-card">
+        <h3 class="text-lg font-semibold mb-6 flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-primary"></span>
           Genres Read
-          <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-10 h-0.5 bg-primary"></span>
         </h3>
-        <div class="relative h-[300px] flex justify-center">
-          <canvas #genreCanvas width="500" height="300"></canvas>
 
-          <!-- Fallback for browsers without canvas support -->
-          @if (genreDistribution.length > 0) {
-            <div class="hidden w-full">
-              @for (genre of genreDistribution.slice(0, 5); track genre) {
-                <div class="flex items-center mb-4">
-                  <span class="w-24 text-sm text-text-secondary-light dark:text-text-secondary-dark">{{ genre.name }}</span>
-                  <div class="h-6 bg-gradient-to-r from-primary to-primary-light rounded-full flex items-center justify-end px-3 text-white text-xs font-medium min-w-[30px] transition-all duration-1000 flex-1"
-                       [style.width.%]="(genre.value / totalBooksRead) * 100">
-                    {{ genre.value }}
-                  </div>
-                </div>
-              }
+        @if (genreSegments.length > 0) {
+          <div class="flex flex-col sm:flex-row items-center gap-8">
+            <!-- Donut -->
+            <div class="relative shrink-0">
+              <svg viewBox="0 0 200 200" class="w-44 h-44 -rotate-90">
+                <!-- track -->
+                <circle
+                  cx="100" cy="100" [attr.r]="donutRadius"
+                  fill="none" class="stroke-muted" [attr.stroke-width]="donutStrokeWidth"
+                />
+                <!-- segments -->
+                @for (seg of genreSegments; track seg.name; let i = $index) {
+                  <circle
+                    cx="100" cy="100" [attr.r]="donutRadius"
+                    fill="none" stroke-linecap="round"
+                    [attr.stroke]="seg.color"
+                    [attr.stroke-width]="donutStrokeWidth"
+                    [attr.stroke-dasharray]="seg.dashArray"
+                    [attr.stroke-dashoffset]="seg.dashOffset"
+                    class="donut-segment"
+                    [style.animationDelay.ms]="i * 120"
+                  />
+                }
+              </svg>
+              <!-- center label -->
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span class="text-3xl font-bold text-foreground leading-none">{{ genreTotal }}</span>
+                <span class="text-xs text-muted-foreground mt-1">books</span>
+              </div>
             </div>
-          }
-        </div>
+
+            <!-- Legend -->
+            <ul class="flex-1 w-full space-y-2.5">
+              @for (seg of genreSegments; track seg.name) {
+                <li class="flex items-center gap-3 text-sm">
+                  <span class="h-3 w-3 rounded-full shrink-0" [style.background]="seg.color"></span>
+                  <span class="flex-1 truncate text-foreground">{{ seg.name }}</span>
+                  <span class="text-muted-foreground tabular-nums">{{ seg.value }}</span>
+                  <span class="w-10 text-right font-medium text-foreground tabular-nums">{{ seg.percent }}%</span>
+                </li>
+              }
+            </ul>
+          </div>
+        } @else {
+          <div class="flex items-center justify-center h-[200px] text-muted-foreground">No data available</div>
+        }
       </div>
 
-      <!-- Monthly Progress Chart -->
-      <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm p-6">
-        <h3 class="text-xl font-semibold mb-6 text-center pb-2 relative">
+      <!-- Monthly Progress Area Chart -->
+      <div class="panel-card">
+        <h3 class="text-lg font-semibold mb-6 flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-primary"></span>
           Monthly Progress
-          <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-10 h-0.5 bg-primary"></span>
         </h3>
-        <div class="relative h-[300px] flex justify-center">
-          <canvas #monthlyCanvas width="500" height="300"></canvas>
 
-          <!-- Fallback for browsers without canvas support -->
-          <div class="hidden w-full">
-            @for (month of monthlyProgress; track month) {
-              <div class="flex items-center mb-4">
-                <span class="w-24 text-sm text-text-secondary-light dark:text-text-secondary-dark">{{ month.month }}</span>
-                <div class="h-6 bg-gradient-to-r from-primary to-primary-light rounded-full flex items-center justify-end px-3 text-white text-xs font-medium min-w-[30px] transition-all duration-1000 flex-1"
-                     [style.width.%]="(month.books / 5) * 100">
-                  {{ month.books }} books
-                </div>
-              </div>
+        @if (hasMonthlyData) {
+          <svg viewBox="0 0 620 240" class="w-full h-[240px]" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" class="[stop-color:hsl(var(--primary))]" stop-opacity="0.35"/>
+                <stop offset="100%" class="[stop-color:hsl(var(--primary))]" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+
+            <!-- gridlines -->
+            @for (gy of monthlyChart.gridLines; track gy) {
+              <line x1="14" [attr.y1]="gy" x2="606" [attr.y2]="gy" class="stroke-border" stroke-width="1" stroke-dasharray="2 4"/>
             }
+
+            <!-- area + line -->
+            <path [attr.d]="monthlyChart.areaPath" fill="url(#areaFill)" class="chart-area"/>
+            <path [attr.d]="monthlyChart.linePath" fill="none" class="chart-line stroke-primary" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/>
+
+            <!-- points -->
+            @for (p of monthlyChart.points; track p.month) {
+              @if (p.books > 0) {
+                <circle [attr.cx]="p.x" [attr.cy]="p.y" r="4" class="fill-background stroke-primary" stroke-width="2.5"/>
+              }
+              <text [attr.x]="p.x" y="232" text-anchor="middle" class="fill-muted-foreground" style="font-size: 11px;">{{ p.month }}</text>
+            }
+          </svg>
+        } @else {
+          <div class="flex flex-col items-center justify-center h-[240px] text-center text-muted-foreground">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-3 opacity-60">
+              <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
+            </svg>
+            <p class="text-sm">No reading sessions recorded this year yet.</p>
           </div>
-        </div>
+        }
       </div>
     </div>
 
@@ -100,13 +163,13 @@
     <div class="mb-8">
       <h3 class="text-xl font-semibold mb-6 pb-2 relative">
         Reading Insights
-        <span class="absolute bottom-0 left-0 w-10 h-0.5 bg-primary"></span>
+        <span class="absolute bottom-0 left-0 w-10 h-0.5 bg-primary rounded-full"></span>
       </h3>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Most Read Genre -->
-        <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md p-6">
-          <h4 class="text-lg font-medium mb-4 text-foreground">Most Read Genre</h4>
+        <div class="panel-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30">
+          <h4 class="text-sm font-medium mb-3 text-muted-foreground uppercase tracking-wider">Most Read Genre</h4>
           @if (genreDistribution.length > 0) {
             <p class="text-primary text-xl font-semibold">
               {{ genreDistribution[0].name }}
@@ -115,49 +178,39 @@
               </span>
             </p>
           } @else {
-            <p class="text-muted-foreground">
-              No data available
-            </p>
+            <p class="text-muted-foreground">No data available</p>
           }
         </div>
 
         <!-- Average Reading Time -->
-        <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md p-6">
-          <h4 class="text-lg font-medium mb-4 text-foreground">Average Reading Time</h4>
+        <div class="panel-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30">
+          <h4 class="text-sm font-medium mb-3 text-muted-foreground uppercase tracking-wider">Average Reading Time</h4>
           @if (totalBooksRead > 0) {
             <p class="text-primary text-xl font-semibold">
               {{ (readingTimeThisYear / totalBooksRead / 60).toFixed(1) }}
-              <span class="block text-sm font-normal text-muted-foreground mt-1">
-                hours per book
-              </span>
+              <span class="block text-sm font-normal text-muted-foreground mt-1">hours per book</span>
             </p>
           } @else {
-            <p class="text-muted-foreground">
-              No data available
-            </p>
+            <p class="text-muted-foreground">No data available</p>
           }
         </div>
 
         <!-- Reading Pace -->
-        <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md p-6">
-          <h4 class="text-lg font-medium mb-4 text-foreground">Reading Pace</h4>
+        <div class="panel-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30">
+          <h4 class="text-sm font-medium mb-3 text-muted-foreground uppercase tracking-wider">Reading Pace</h4>
           @if (readingTimeThisYear > 0) {
             <p class="text-primary text-xl font-semibold">
               {{ (pagesReadThisYear / (readingTimeThisYear / 60)).toFixed(1) }}
-              <span class="block text-sm font-normal text-muted-foreground mt-1">
-                pages per hour
-              </span>
+              <span class="block text-sm font-normal text-muted-foreground mt-1">pages per hour</span>
             </p>
           } @else {
-            <p class="text-muted-foreground">
-              No data available
-            </p>
+            <p class="text-muted-foreground">No data available</p>
           }
         </div>
 
         <!-- Best Reading Month -->
-        <div class="rounded-lg border border-border bg-card text-card-foreground shadow-sm transition-all hover:-translate-y-1 hover:shadow-md p-6">
-          <h4 class="text-lg font-medium mb-4 text-foreground">Best Reading Month</h4>
+        <div class="panel-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30">
+          <h4 class="text-sm font-medium mb-3 text-muted-foreground uppercase tracking-wider">Best Reading Month</h4>
           @if (getBestReadingMonth().books > 0) {
             <p class="text-primary text-xl font-semibold">
               {{ getBestReadingMonth().month }}
@@ -166,9 +219,7 @@
               </span>
             </p>
           } @else {
-            <p class="text-muted-foreground">
-              No data available
-            </p>
+            <p class="text-muted-foreground">No data available</p>
           }
         </div>
       </div>
