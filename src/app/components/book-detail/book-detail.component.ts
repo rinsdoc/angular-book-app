@@ -6,7 +6,7 @@ import {ActivatedRoute, Router, RouterModule} from "@angular/router"
 import {Book} from "../../domain/book"
 import {BookService} from "../../application/book.service"
 import {ReadingSession} from '../../domain/reading-session';
-import {ReadingSessionService} from "../../services/reading-session.service"
+import {ReadingSessionService} from "../../application/reading-session.service"
 import {BookReviewComponent} from "../book-review/book-review.component"
 import {UserBook} from '../../domain/user-book';
 import {NgIcon, provideIcons} from '@ng-icons/core';
@@ -121,6 +121,7 @@ export class BookDetailComponent implements OnInit {
         } else {
           this.currentPage = 0;
         }
+        this.cdr.detectChanges();
       });
     }
   }

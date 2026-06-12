@@ -102,7 +102,5 @@ src/
 These resources will help you better understand the technologies used in BookTracker:
 
 - [Angular Documentation](https://angular.dev/) - Official guide and reference for Angular development
-- [Angular Material](https://material.angular.io/) - Material Design components for Angular
 - [RxJS](https://rxjs.dev/) - Reactive programming library used in Angular
 - [TailwindCSS](https://tailwindcss.com/docs) - CSS framework used for interface design
-- [Tailwind Animation](https://github.com/jamiebuilds/tailwindcss-animate) - Plugin for adding animations with Tailwind

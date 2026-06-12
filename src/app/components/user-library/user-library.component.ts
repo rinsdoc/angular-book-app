@@ -68,6 +68,7 @@ export class UserLibraryComponent implements OnInit {
     if (bookIndex !== -1) {
       this.userBooks[bookIndex].status = updated.status
       this.filterByTab(this.activeTab)
+      this.cdr.detectChanges()
     }
   }
 
