@@ -16,13 +16,20 @@ interface ChartPoint {
   y: number
   month: string
   books: number
+  color: string
+  valueY: number
+}
+
+interface YTick {
+  value: number
+  y: number
 }
 
 interface MonthlyChart {
   linePath: string
   areaPath: string
   points: ChartPoint[]
-  gridLines: number[]
+  yTicks: YTick[]
   baseY: number
   maxBooks: number
 }
@@ -51,8 +58,24 @@ export class ReadingStatsComponent implements OnInit {
   genreTotal = 0
 
   // Line/area chart geometry (monthly progress)
-  monthlyChart: MonthlyChart = {linePath: "", areaPath: "", points: [], gridLines: [], baseY: 0, maxBooks: 0}
+  monthlyChart: MonthlyChart = {linePath: "", areaPath: "", points: [], yTicks: [], baseY: 0, maxBooks: 0}
   hasMonthlyData = false
+
+  // One vibrant colour per month — a cohesive rainbow across the year
+  private readonly monthColors = [
+    "hsl(262 83% 62%)", // Jan – violet
+    "hsl(232 78% 62%)", // Feb – indigo
+    "hsl(205 85% 55%)", // Mar – blue
+    "hsl(180 70% 45%)", // Apr – cyan
+    "hsl(158 64% 46%)", // May – teal
+    "hsl(130 55% 50%)", // Jun – green
+    "hsl(95 58% 50%)",  // Jul – lime
+    "hsl(45 90% 55%)",  // Aug – yellow
+    "hsl(32 92% 55%)",  // Sep – amber
+    "hsl(18 88% 57%)",  // Oct – orange
+    "hsl(348 80% 60%)", // Nov – red
+    "hsl(312 72% 60%)", // Dec – magenta
+  ]
 
   // Vibrant palette that reads well in both light and dark themes
   private readonly palette = [
@@ -128,10 +151,11 @@ export class ReadingStatsComponent implements OnInit {
     // viewBox: 0 0 620 240 (kept in sync with the template)
     const width = 620
     const height = 240
-    const padX = 14
-    const padTop = 18
+    const padLeft = 30 // room for the Y-axis labels
+    const padRight = 14
+    const padTop = 38 // headroom so the "BOOKS" caption clears the top tick
     const padBottom = 34
-    const innerW = width - padX * 2
+    const innerW = width - padLeft - padRight
     const innerH = height - padTop - padBottom
     const baseY = padTop + innerH
 
@@ -141,12 +165,17 @@ export class ReadingStatsComponent implements OnInit {
     const maxBooks = Math.max(...data.map((m) => m.books), 1)
     const step = n > 1 ? innerW / (n - 1) : 0
 
-    const points: ChartPoint[] = data.map((m, i) => ({
-      x: padX + i * step,
-      y: padTop + innerH - (m.books / maxBooks) * innerH,
-      month: m.month,
-      books: m.books,
-    }))
+    const points: ChartPoint[] = data.map((m, i) => {
+      const y = padTop + innerH - (m.books / maxBooks) * innerH
+      return {
+        x: padLeft + i * step,
+        y,
+        month: m.month,
+        books: m.books,
+        color: this.monthColors[i % this.monthColors.length],
+        valueY: y - 9,
+      }
+    })
 
     const linePath = points
       .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
@@ -156,9 +185,13 @@ export class ReadingStatsComponent implements OnInit {
       ? `${linePath} L ${points[points.length - 1].x.toFixed(1)} ${baseY} L ${points[0].x.toFixed(1)} ${baseY} Z`
       : ""
 
-    // Three evenly spaced gridlines plus the baseline
-    const gridLines = [0, 1, 2, 3].map((i) => padTop + (innerH / 3) * i)
+    // Integer Y-axis ticks from 0 to maxBooks (at most ~4 marks to avoid clutter)
+    const tickStep = Math.max(1, Math.ceil(maxBooks / 4))
+    const yTicks: YTick[] = []
+    for (let value = 0; value <= maxBooks; value += tickStep) {
+      yTicks.push({value, y: padTop + innerH - (value / maxBooks) * innerH})
+    }
 
-    this.monthlyChart = {linePath, areaPath, points, gridLines, baseY, maxBooks}
+    this.monthlyChart = {linePath, areaPath, points, yTicks, baseY, maxBooks}
   }
 }

@@ -6,8 +6,8 @@
     "status": "read",
     "rating": 5,
     "review": "One of the greatest novels ever written. The magical realism and multi-generational storytelling is captivating.",
-    "dateStarted": "2023-01-15",
-    "dateFinished": "2023-02-10"
+    "dateStarted": "2026-01-02",
+    "dateFinished": "2026-01-18"
   },
   {
     "id": 2,
@@ -16,15 +16,15 @@
     "status": "read",
     "rating": 4,
     "review": "A chilling dystopian classic that remains relevant today.",
-    "dateStarted": "2023-03-05",
-    "dateFinished": "2023-03-20"
+    "dateStarted": "2026-02-01",
+    "dateFinished": "2026-02-12"
   },
   {
     "id": 3,
     "userId": 1,
     "bookId": 3,
     "status": "currently-reading",
-    "dateStarted": "2023-04-10"
+    "dateStarted": "2026-06-02"
   },
   {
     "id": 4,
@@ -39,13 +39,70 @@
     "status": "read",
     "rating": 5,
     "review": "A powerful story about justice and growing up in the American South.",
-    "dateStarted": "2023-05-15",
-    "dateFinished": "2023-06-01"
+    "dateStarted": "2026-02-26",
+    "dateFinished": "2026-03-09"
   },
   {
     "id": 6,
     "userId": 1,
     "bookId": 4,
     "status": "want-to-read"
+  },
+  {
+    "id": 7,
+    "userId": 1,
+    "bookId": 30,
+    "status": "read",
+    "rating": 4,
+    "review": "A sharp political fable that still bites. Short but unforgettable.",
+    "dateStarted": "2026-03-20",
+    "dateFinished": "2026-03-28"
+  },
+  {
+    "id": 8,
+    "userId": 1,
+    "bookId": 8,
+    "status": "read",
+    "rating": 4,
+    "review": "A glittering, melancholy portrait of the Jazz Age. Beautifully written.",
+    "dateStarted": "2026-04-04",
+    "dateFinished": "2026-04-15"
+  },
+  {
+    "id": 9,
+    "userId": 1,
+    "bookId": 16,
+    "status": "read",
+    "rating": 5,
+    "review": "An epic of staggering scope. The world-building is unmatched.",
+    "dateStarted": "2026-04-28",
+    "dateFinished": "2026-05-10"
+  },
+  {
+    "id": 10,
+    "userId": 1,
+    "bookId": 14,
+    "status": "read",
+    "rating": 5,
+    "review": "A thought-provoking sweep through human history. Eye-opening.",
+    "dateStarted": "2026-05-16",
+    "dateFinished": "2026-05-30"
+  },
+  {
+    "id": 11,
+    "userId": 1,
+    "bookId": 33,
+    "status": "read",
+    "rating": 5,
+    "review": "A love letter to books and to Barcelona. Atmospheric and gripping.",
+    "dateStarted": "2026-05-31",
+    "dateFinished": "2026-06-08"
+  },
+  {
+    "id": 12,
+    "userId": 1,
+    "bookId": 12,
+    "status": "currently-reading",
+    "dateStarted": "2026-06-10"
   }
 ]

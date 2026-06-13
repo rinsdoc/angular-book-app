@@ -2,66 +2,145 @@
   {
     "id": 1,
     "userBookId": 1,
-    "date": "2023-01-20",
-    "pagesRead": 50,
-    "minutes": 60,
+    "date": "2026-01-05",
+    "pagesRead": 150,
+    "minutes": 110,
     "notes": "Really enjoying the magical realism elements."
   },
   {
     "id": 2,
     "userBookId": 1,
-    "date": "2023-01-25",
-    "pagesRead": 100,
-    "minutes": 120,
+    "date": "2026-01-12",
+    "pagesRead": 150,
+    "minutes": 100,
     "notes": "The Buendía family is fascinating."
   },
   {
     "id": 3,
     "userBookId": 1,
-    "date": "2023-02-05",
-    "pagesRead": 417,
-    "minutes": 180,
+    "date": "2026-01-18",
+    "pagesRead": 117,
+    "minutes": 80,
     "notes": "Finished the book. What an incredible journey!"
   },
   {
     "id": 4,
     "userBookId": 2,
-    "date": "2023-03-10",
-    "pagesRead": 150,
-    "minutes": 90,
+    "date": "2026-02-03",
+    "pagesRead": 180,
+    "minutes": 100,
     "notes": "The dystopian world is chilling."
   },
   {
     "id": 5,
     "userBookId": 2,
-    "date": "2023-03-18",
-    "pagesRead": 328,
-    "minutes": 120,
+    "date": "2026-02-12",
+    "pagesRead": 148,
+    "minutes": 90,
     "notes": "Finished. A powerful warning about totalitarianism."
   },
   {
     "id": 6,
-    "userBookId": 3,
-    "date": "2023-04-15",
-    "pagesRead": 100,
-    "minutes": 75,
-    "notes": "Bilbo's adventure is just beginning!"
+    "userBookId": 5,
+    "date": "2026-03-02",
+    "pagesRead": 160,
+    "minutes": 95,
+    "notes": "Scout is such a compelling narrator."
   },
   {
     "id": 7,
     "userBookId": 5,
-    "date": "2023-05-20",
-    "pagesRead": 150,
+    "date": "2026-03-09",
+    "pagesRead": 164,
     "minutes": 90,
-    "notes": "Scout is such a compelling narrator."
+    "notes": "The trial scenes are powerful and moving."
   },
   {
     "id": 8,
-    "userBookId": 5,
-    "date": "2023-05-30",
-    "pagesRead": 324,
+    "userBookId": 7,
+    "date": "2026-03-22",
+    "pagesRead": 144,
+    "minutes": 70,
+    "notes": "Read it in one sitting. Devastatingly clever."
+  },
+  {
+    "id": 9,
+    "userBookId": 8,
+    "date": "2026-04-08",
+    "pagesRead": 120,
+    "minutes": 80,
+    "notes": "Gatsby's parties are dazzling on the page."
+  },
+  {
+    "id": 10,
+    "userBookId": 8,
+    "date": "2026-04-15",
+    "pagesRead": 98,
+    "minutes": 60,
+    "notes": "That ending lingers. Beautiful and sad."
+  },
+  {
+    "id": 11,
+    "userBookId": 9,
+    "date": "2026-05-03",
+    "pagesRead": 200,
+    "minutes": 130,
+    "notes": "Arrakis feels utterly real. Hooked."
+  },
+  {
+    "id": 12,
+    "userBookId": 9,
+    "date": "2026-05-10",
+    "pagesRead": 212,
     "minutes": 120,
-    "notes": "The trial scenes are powerful and moving."
+    "notes": "Finished. An absolute masterpiece of the genre."
+  },
+  {
+    "id": 13,
+    "userBookId": 10,
+    "date": "2026-05-22",
+    "pagesRead": 240,
+    "minutes": 150,
+    "notes": "The cognitive revolution chapter blew my mind."
+  },
+  {
+    "id": 14,
+    "userBookId": 10,
+    "date": "2026-05-30",
+    "pagesRead": 224,
+    "minutes": 140,
+    "notes": "Finished. A whole new perspective on our species."
+  },
+  {
+    "id": 15,
+    "userBookId": 11,
+    "date": "2026-06-03",
+    "pagesRead": 300,
+    "minutes": 170,
+    "notes": "The Cemetery of Forgotten Books is pure magic."
+  },
+  {
+    "id": 16,
+    "userBookId": 11,
+    "date": "2026-06-08",
+    "pagesRead": 265,
+    "minutes": 150,
+    "notes": "Finished. Couldn't put it down toward the end."
+  },
+  {
+    "id": 17,
+    "userBookId": 3,
+    "date": "2026-06-11",
+    "pagesRead": 90,
+    "minutes": 60,
+    "notes": "Bilbo's adventure is just beginning!"
+  },
+  {
+    "id": 18,
+    "userBookId": 12,
+    "date": "2026-06-12",
+    "pagesRead": 120,
+    "minutes": 80,
+    "notes": "Kvothe's voice is mesmerising."
   }
 ]
-

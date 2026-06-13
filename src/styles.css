@@ -193,16 +193,49 @@
 
   /* Stat summary cards */
   .stat-card {
-    @apply rounded-2xl border border-border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30 relative overflow-hidden p-8 text-center;
+    @apply relative overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30 p-6;
   }
 
-  .stat-icon {
-    @apply mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary;
+  .stat-glow {
+    @apply pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full blur-2xl opacity-60;
+  }
+
+  .stat-chip {
+    @apply mb-5 flex h-12 w-12 items-center justify-center rounded-xl text-white shadow-md;
+  }
+
+  .stat-value {
+    @apply text-3xl font-bold text-foreground tabular-nums leading-none;
+  }
+
+  .stat-label {
+    @apply text-muted-foreground text-sm font-medium mt-2;
   }
 
   /* Generic content cards */
   .panel-card {
     @apply rounded-2xl border border-border bg-card text-card-foreground shadow-sm p-6;
+  }
+
+  /* Reading insight cards */
+  .insight-card {
+    @apply flex items-start gap-4 rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30;
+  }
+
+  .insight-icon {
+    @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-xl;
+  }
+
+  .insight-label {
+    @apply text-xs font-medium text-muted-foreground uppercase tracking-wider;
+  }
+
+  .insight-value {
+    @apply text-foreground text-lg font-bold mt-1 leading-snug;
+  }
+
+  .insight-sub {
+    @apply text-sm text-muted-foreground mt-0.5;
   }
 }
 

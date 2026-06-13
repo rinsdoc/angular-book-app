@@ -20,41 +20,44 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
       <!-- Books Read Card -->
       <div class="stat-card">
-        <div class="stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-          </svg>
+        <span class="stat-glow bg-violet-500/30"></span>
+        <div class="relative">
+          <div class="stat-chip bg-gradient-to-br from-violet-500 to-purple-600 shadow-violet-500/30">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+            </svg>
+          </div>
+          <h3 class="stat-value">{{ totalBooksRead }}</h3>
+          <p class="stat-label">Books Read</p>
         </div>
-        <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-1">
-          {{ totalBooksRead }}
-        </h3>
-        <p class="text-muted-foreground font-medium">Books Read</p>
       </div>
 
       <!-- Pages Read Card -->
       <div class="stat-card">
-        <div class="stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5M8 13h8M8 17h5"/>
-          </svg>
+        <span class="stat-glow bg-sky-500/30"></span>
+        <div class="relative">
+          <div class="stat-chip bg-gradient-to-br from-sky-500 to-blue-600 shadow-sky-500/30">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5M8 13h8M8 17h5"/>
+            </svg>
+          </div>
+          <h3 class="stat-value">{{ pagesReadThisYear }}</h3>
+          <p class="stat-label">Pages This Year</p>
         </div>
-        <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-1">
-          {{ pagesReadThisYear }}
-        </h3>
-        <p class="text-muted-foreground font-medium">Pages This Year</p>
       </div>
 
       <!-- Reading Time Card -->
       <div class="stat-card">
-        <div class="stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-          </svg>
+        <span class="stat-glow bg-amber-500/30"></span>
+        <div class="relative">
+          <div class="stat-chip bg-gradient-to-br from-amber-500 to-orange-600 shadow-amber-500/30">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3 class="stat-value">{{ (readingTimeThisYear / 60).toFixed(1) }}<span class="text-lg text-muted-foreground font-semibold ml-1">h</span></h3>
+          <p class="stat-label">Hours Reading</p>
         </div>
-        <h3 class="text-4xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent mb-1">
-          {{ (readingTimeThisYear / 60).toFixed(1) }}
-        </h3>
-        <p class="text-muted-foreground font-medium">Hours Reading</p>
       </div>
     </div>
 
@@ -93,8 +96,8 @@
               </svg>
               <!-- center label -->
               <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span class="text-3xl font-bold text-foreground leading-none">{{ genreTotal }}</span>
-                <span class="text-xs text-muted-foreground mt-1">books</span>
+                <span class="text-3xl font-bold text-foreground leading-none">{{ totalBooksRead }}</span>
+                <span class="text-xs text-muted-foreground mt-1">books read</span>
               </div>
             </div>
 
@@ -126,24 +129,28 @@
           <svg viewBox="0 0 620 240" class="w-full h-[240px]" preserveAspectRatio="none">
             <defs>
               <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" class="[stop-color:hsl(var(--primary))]" stop-opacity="0.35"/>
+                <stop offset="0%" class="[stop-color:hsl(var(--primary))]" stop-opacity="0.30"/>
                 <stop offset="100%" class="[stop-color:hsl(var(--primary))]" stop-opacity="0"/>
               </linearGradient>
             </defs>
 
-            <!-- gridlines -->
-            @for (gy of monthlyChart.gridLines; track gy) {
-              <line x1="14" [attr.y1]="gy" x2="606" [attr.y2]="gy" class="stroke-border" stroke-width="1" stroke-dasharray="2 4"/>
+            <!-- Y axis: gridlines + value labels -->
+            @for (tick of monthlyChart.yTicks; track tick.value) {
+              <line x1="30" [attr.y1]="tick.y" x2="606" [attr.y2]="tick.y" class="stroke-border" stroke-width="1" stroke-dasharray="2 4"/>
+              <text x="22" [attr.y]="tick.y + 3.5" text-anchor="end" class="fill-muted-foreground" style="font-size: 10px;">{{ tick.value }}</text>
             }
+            <!-- Y axis caption -->
+            <text x="14" y="12" text-anchor="start" class="fill-muted-foreground" style="font-size: 9px; letter-spacing: 0.04em;">BOOKS</text>
 
-            <!-- area + line -->
+            <!-- area + dashed line -->
             <path [attr.d]="monthlyChart.areaPath" fill="url(#areaFill)" class="chart-area"/>
-            <path [attr.d]="monthlyChart.linePath" fill="none" class="chart-line stroke-primary" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/>
+            <path [attr.d]="monthlyChart.linePath" fill="none" class="chart-line stroke-primary" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
 
-            <!-- points -->
-            @for (p of monthlyChart.points; track p.month) {
+            <!-- points: one colour per month -->
+            @for (p of monthlyChart.points; track p.month; let i = $index) {
               @if (p.books > 0) {
-                <circle [attr.cx]="p.x" [attr.cy]="p.y" r="4" class="fill-background stroke-primary" stroke-width="2.5"/>
+                <circle [attr.cx]="p.x" [attr.cy]="p.y" r="4.5" [attr.fill]="p.color" class="stroke-background chart-dot" stroke-width="2" [style.animationDelay.ms]="300 + i * 60"/>
+                <text [attr.x]="p.x" [attr.y]="p.valueY" text-anchor="middle" [attr.fill]="p.color" class="chart-dot" [style.animationDelay.ms]="300 + i * 60" style="font-size: 11px; font-weight: 700;">{{ p.books }}</text>
               }
               <text [attr.x]="p.x" y="232" text-anchor="middle" class="fill-muted-foreground" style="font-size: 11px;">{{ p.month }}</text>
             }
@@ -168,59 +175,75 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Most Read Genre -->
-        <div class="panel-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30">
-          <h4 class="text-sm font-medium mb-3 text-muted-foreground uppercase tracking-wider">Most Read Genre</h4>
-          @if (genreDistribution.length > 0) {
-            <p class="text-primary text-xl font-semibold">
-              {{ genreDistribution[0].name }}
-              <span class="block text-sm font-normal text-muted-foreground mt-1">
-                {{ genreDistribution[0].value }} books
-              </span>
-            </p>
-          } @else {
-            <p class="text-muted-foreground">No data available</p>
-          }
+        <div class="insight-card">
+          <div class="insight-icon bg-violet-500/10 text-violet-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <h4 class="insight-label">Most Read Genre</h4>
+            @if (genreDistribution.length > 0) {
+              <p class="insight-value truncate">{{ genreDistribution[0].name }}</p>
+              <p class="insight-sub">{{ genreDistribution[0].value }} books</p>
+            } @else {
+              <p class="insight-value text-muted-foreground">No data</p>
+            }
+          </div>
         </div>
 
         <!-- Average Reading Time -->
-        <div class="panel-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30">
-          <h4 class="text-sm font-medium mb-3 text-muted-foreground uppercase tracking-wider">Average Reading Time</h4>
-          @if (totalBooksRead > 0) {
-            <p class="text-primary text-xl font-semibold">
-              {{ (readingTimeThisYear / totalBooksRead / 60).toFixed(1) }}
-              <span class="block text-sm font-normal text-muted-foreground mt-1">hours per book</span>
-            </p>
-          } @else {
-            <p class="text-muted-foreground">No data available</p>
-          }
+        <div class="insight-card">
+          <div class="insight-icon bg-sky-500/10 text-sky-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <h4 class="insight-label">Avg. Reading Time</h4>
+            @if (totalBooksRead > 0) {
+              <p class="insight-value">{{ (readingTimeThisYear / totalBooksRead / 60).toFixed(1) }} <span class="text-sm font-semibold text-muted-foreground">h</span></p>
+              <p class="insight-sub">per book</p>
+            } @else {
+              <p class="insight-value text-muted-foreground">No data</p>
+            }
+          </div>
         </div>
 
         <!-- Reading Pace -->
-        <div class="panel-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30">
-          <h4 class="text-sm font-medium mb-3 text-muted-foreground uppercase tracking-wider">Reading Pace</h4>
-          @if (readingTimeThisYear > 0) {
-            <p class="text-primary text-xl font-semibold">
-              {{ (pagesReadThisYear / (readingTimeThisYear / 60)).toFixed(1) }}
-              <span class="block text-sm font-normal text-muted-foreground mt-1">pages per hour</span>
-            </p>
-          } @else {
-            <p class="text-muted-foreground">No data available</p>
-          }
+        <div class="insight-card">
+          <div class="insight-icon bg-emerald-500/10 text-emerald-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <h4 class="insight-label">Reading Pace</h4>
+            @if (readingTimeThisYear > 0) {
+              <p class="insight-value">{{ (pagesReadThisYear / (readingTimeThisYear / 60)).toFixed(1) }} <span class="text-sm font-semibold text-muted-foreground">pg/h</span></p>
+              <p class="insight-sub">pages per hour</p>
+            } @else {
+              <p class="insight-value text-muted-foreground">No data</p>
+            }
+          </div>
         </div>
 
         <!-- Best Reading Month -->
-        <div class="panel-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/10 hover:border-primary/30">
-          <h4 class="text-sm font-medium mb-3 text-muted-foreground uppercase tracking-wider">Best Reading Month</h4>
-          @if (getBestReadingMonth().books > 0) {
-            <p class="text-primary text-xl font-semibold">
-              {{ getBestReadingMonth().month }}
-              <span class="block text-sm font-normal text-muted-foreground mt-1">
-                {{ getBestReadingMonth().books }} books
-              </span>
-            </p>
-          } @else {
-            <p class="text-muted-foreground">No data available</p>
-          }
+        <div class="insight-card">
+          <div class="insight-icon bg-amber-500/10 text-amber-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <h4 class="insight-label">Best Reading Month</h4>
+            @if (getBestReadingMonth().books > 0) {
+              <p class="insight-value">{{ getBestReadingMonth().month }}</p>
+              <p class="insight-sub">{{ getBestReadingMonth().books }} books</p>
+            } @else {
+              <p class="insight-value text-muted-foreground">No data</p>
+            }
+          </div>
         </div>
       </div>
     </div>
