@@ -82,7 +82,7 @@ export class ReadingStatsComponent implements OnInit {
     "hsl(262 83% 60%)",
     "hsl(199 89% 52%)",
     "hsl(330 75% 60%)",
-    "hsl(160 60% 45%)",
+    "hsl(158 64% 46%)",
     "hsl(35 92% 55%)",
     "hsl(280 65% 65%)",
   ]
@@ -126,14 +126,15 @@ export class ReadingStatsComponent implements OnInit {
   }
 
   private buildGenreDonut(): void {
-    const top = this.genreDistribution.slice(0, 6)
-    this.genreTotal = top.reduce((sum, g) => sum + g.value, 0)
-    const total = this.genreTotal || 1
+    const top = this.genreDistribution.slice(0, 6);
+    this.genreTotal = top.reduce((sum, g) => sum + g.value, 0);
+    const total = this.genreTotal || 1;
 
-    let offset = 0
-    this.genreSegments = top.map((genre, index) => {
-      const fraction = genre.value / total
-      const length = fraction * this.donutCircumference
+    let offset = 0;
+
+    const baseSegments = top.map((genre, index) => {
+      const fraction = genre.value / total;
+      const length = fraction * this.donutCircumference;
       const segment: GenreSegment = {
         name: genre.name,
         value: genre.value,
@@ -141,10 +142,25 @@ export class ReadingStatsComponent implements OnInit {
         color: this.palette[index % this.palette.length],
         dashArray: `${length} ${this.donutCircumference - length}`,
         dashOffset: -offset,
-      }
-      offset += length
-      return segment
-    })
+      };
+      offset += length;
+      return segment;
+    });
+
+    // To create the perfect donut effect we create a small dot to match the first segment.
+    if (baseSegments.length > 1) {
+      const patchLength = 4;
+
+      const firstSegmentPatch: GenreSegment = {
+        ...baseSegments[0],
+        dashArray: `${patchLength} ${this.donutCircumference - patchLength}`,
+        dashOffset: baseSegments[0].dashOffset,
+      };
+
+      this.genreSegments = [...baseSegments, firstSegmentPatch];
+    } else {
+      this.genreSegments = baseSegments;
+    }
   }
 
   private buildMonthlyChart(): void {
