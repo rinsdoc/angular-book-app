@@ -136,7 +136,7 @@
   }
 
   .book-cover img {
-    @apply w-full h-full object-cover transition-transform duration-700 group-hover:scale-110;
+    @apply w-full h-full object-cover;
   }
 
   .book-cover-overlay {
@@ -153,10 +153,6 @@
 
   .book-author {
     @apply text-muted-foreground text-sm mb-4;
-  }
-
-  .book-action {
-    @apply mt-auto inline-flex items-center justify-center w-full py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-lg shadow-md shadow-primary/20 transition-all duration-300 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30;
   }
 
   /* Stat summary cards */

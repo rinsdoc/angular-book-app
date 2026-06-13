@@ -102,6 +102,12 @@ export class BookDetailComponent implements OnInit {
     this.router.navigate(["/discover"])
   }
 
+  // Five booleans for the average-rating star row
+  get ratingStars(): boolean[] {
+    const rounded = Math.round(this.book?.avgRating ?? 0)
+    return [1, 2, 3, 4, 5].map((i) => i <= rounded)
+  }
+
   // Helper to expose numeric book id to child components
   get bookIdNumber(): number {
     if (!this.book) return 0;

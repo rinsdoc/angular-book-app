@@ -17,6 +17,7 @@ export class UserLibraryComponent implements OnInit {
   currentUserId = 1
   activeTab: "all" | "reading" | "toRead" | "read" = "all"
   isLoading = true
+  counts = {all: 0, reading: 0, toRead: 0, read: 0}
 
   constructor(
     private bookService: BookService,
@@ -33,6 +34,12 @@ export class UserLibraryComponent implements OnInit {
     try {
       this.userBooks = await this.bookService.getUserBooks(this.currentUserId)
       this.books = await this.bookService.getBooks()
+      this.counts = {
+        all: this.userBooks.length,
+        reading: this.userBooks.filter((b) => b.status === "currently-reading").length,
+        toRead: this.userBooks.filter((b) => b.status === "want-to-read").length,
+        read: this.userBooks.filter((b) => b.status === "read").length,
+      }
       this.filterByTab(this.activeTab)
     } catch (err) {
       console.error("Error loading user books:", err)

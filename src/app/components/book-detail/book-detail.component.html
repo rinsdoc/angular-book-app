@@ -11,7 +11,7 @@
     <!-- Book Header -->
     <div class="flex items-center mb-8">
       <button
-        class="bg-transparent text-primary hover:bg-primary/10 p-2 mr-4 rounded-full w-10 h-10 min-w-[40px] min-h-[40px] flex items-center justify-center transition-all"
+        class="bg-transparent border border-border/60 text-primary hover:bg-primary/10 p-2 mr-4 rounded-full w-10 h-10 min-w-[40px] min-h-[40px] flex items-center justify-center transition-all"
         aria-label="Go back"
         (click)="goBack()">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
@@ -26,24 +26,25 @@
     </div>
 
     <!-- Book Content -->
-    <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 md:gap-12">
-      <!-- Book Cover Section -->
-      <div>
+    <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-8 md:gap-12 items-start">
+      <!-- Book Cover Section (sticky on desktop) -->
+      <div class="md:sticky md:top-24 self-start space-y-5">
         <div
-          class="group relative overflow-hidden rounded-2xl shadow-xl shadow-black/10 ring-1 ring-border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20">
+          class="group relative overflow-hidden rounded-2xl shadow-xl shadow-black/20 ring-1 ring-border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20">
           <div class="relative w-full max-w-[300px] mx-auto">
             <img
               [src]="book.cover"
               [alt]="book.title"
-              class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+              class="w-full h-auto object-cover"
             />
             <div
               class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-30"></div>
           </div>
         </div>
 
-        <!-- Book Actions -->
-        <div class="mt-6 space-y-3">
+        <!-- Book Actions panel -->
+        <div class="rounded-2xl border border-border bg-card p-4 shadow-sm space-y-3">
+          <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">Your library</p>
           <div class="relative">
             <select
               class="select-primary"
@@ -84,96 +85,110 @@
       <!-- Book Info Container -->
       <div class="relative">
 
-        <!-- Title and author -->
-        <div class="text-xl sm:text-2xl text-muted-foreground font-medium mb-8">
-          {{ book.title }} <span class="text-muted-foreground/70">by</span> {{ book.author }}
-        </div>
+        <!-- Author -->
+        <p class="text-lg sm:text-xl text-muted-foreground mb-8">
+          by <span class="text-foreground font-medium">{{ book.author }}</span>
+        </p>
 
         <!-- Book Meta Info -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10 rounded-2xl border border-border bg-card p-6 shadow-sm">
-          <div class="text-center transition-transform duration-300 hover:-translate-y-1">
-            <div class="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-              Published
-            </div>
-            <div class="text-lg font-semibold text-primary">{{ book.published | date:'mediumDate' }}</div>
-          </div>
+            <div class="grid grid-cols-3 gap-3 sm:gap-6 mb-10 rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
+              <div class="text-center transition-transform duration-300">
+                <div class="mx-auto mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
+                  </svg>
+                </div>
+                <div class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Published</div>
+                <div class="text-sm sm:text-base font-semibold text-foreground">{{ book.published | date:'y' }}</div>
+              </div>
 
-          <div class="text-center transition-transform duration-300 hover:-translate-y-1 sm:border-x sm:border-border">
-            <div class="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-              Pages
-            </div>
-            <div class="text-lg font-semibold text-primary">{{ book.pages }}</div>
-          </div>
+              <div class="text-center transition-transform duration-300 border-x border-border">
+                <div class="mx-auto mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                  </svg>
+                </div>
+                <div class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Pages</div>
+                <div class="text-sm sm:text-base font-semibold text-foreground">{{ book.pages }}</div>
+              </div>
 
-          <div class="text-center transition-transform duration-300 hover:-translate-y-1">
-            <div class="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-              Rating
-            </div>
-            <div class="text-lg font-semibold text-primary">{{ book.avgRating.toFixed(1) }} ★</div>
-          </div>
-        </div>
-
-        <!-- Book Description -->
-        <div class="mb-10 leading-relaxed text-foreground border-l-2 border-primary/30 pl-5">
-          <p>{{ book.description }}</p>
-        </div>
-
-        <!-- Book Genres -->
-        <div class="flex flex-wrap gap-2.5 mb-10">
-          @for (genre of book.genres; track $index) {
-            <span
-              class="rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary/20"
-            >
-              {{ genre }}
-            </span>
-          }
-        </div>
-
-        <!-- Reviews Section -->
-        @if (userBook?.status === 'read') {
-          <div class="mt-12">
-            <h2 class="text-xl font-semibold mb-6 pb-2 border-b border-border relative">
-              Your Review
-              <span class="absolute bottom-0 left-0 w-12 h-0.5 bg-primary"></span>
-            </h2>
-
-            <div class="panel-card">
-              <div class="mb-6">
-                <p class="font-medium mb-2">Your Rating:</p>
-                <div class="flex gap-1">
-                  @for (star of [1, 2, 3, 4, 5]; track $index) {
-                    <span
-                      [class.text-amber-400]="star <= userRating"
-                      [class.text-muted]="star > userRating"
-                      (click)="setRating(star)"
-                      class="text-2xl cursor-pointer transition-transform duration-200 hover:scale-125"
-                    >★</span>
+              <div class="text-center transition-transform duration-300">
+                <div class="mx-auto mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l2.9 6.26 6.1.5-4.6 4.04L18 19l-6-3.66L6 19l1.6-6.2L3 8.76l6.1-.5z"/>
+                  </svg>
+                </div>
+                <div class="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-1">Rating</div>
+                <div class="text-sm sm:text-base font-semibold text-foreground">{{ book.avgRating.toFixed(1) }}</div>
+                <div class="flex justify-center gap-0.5 mt-1">
+                  @for (filled of ratingStars; track $index) {
+                    <span class="text-xs leading-none" [class.text-amber-400]="filled" [class.text-muted]="!filled">★</span>
                   }
                 </div>
               </div>
-
-              <textarea
-                [value]="userReview"
-                (input)="userReview = reviewInput.value"
-                #reviewInput
-                placeholder="Write your review here..."
-                class="w-full min-h-[120px] p-4 rounded-lg border border-input bg-background text-foreground shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:outline-none transition-all resize-y"
-              ></textarea>
-
-              <button
-                (click)="submitReview()"
-                class="mt-6 btn-primary"
-              >
-                Submit Review
-              </button>
             </div>
+
+            <!-- Book Description -->
+            <div class="mb-10 leading-relaxed text-foreground border-l-2 border-primary/30 pl-5">
+              <p>{{ book.description }}</p>
+            </div>
+
+            <!-- Book Genres -->
+            <div class="flex flex-wrap gap-2.5 mb-10">
+              @for (genre of book.genres; track $index) {
+                <span
+                  class="rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary/20"
+                >
+                  {{ genre }}
+                </span>
+              }
+            </div>
+
+            <!-- Reviews Section -->
+            @if (userBook?.status === 'read') {
+              <div class="mt-12">
+                <h2 class="text-xl font-semibold mb-6 pb-2 border-b border-border relative">
+                  Your Review
+                  <span class="absolute bottom-0 left-0 w-12 h-0.5 bg-primary"></span>
+                </h2>
+
+                <div class="panel-card">
+                  <div class="mb-6">
+                    <p class="font-medium mb-2">Your Rating:</p>
+                    <div class="flex gap-1">
+                      @for (star of [1, 2, 3, 4, 5]; track $index) {
+                        <span
+                          [class.text-amber-400]="star <= userRating"
+                          [class.text-muted]="star > userRating"
+                          (click)="setRating(star)"
+                          class="text-2xl cursor-pointer transition-transform duration-200 hover:scale-125"
+                        >★</span>
+                      }
+                    </div>
+                  </div>
+
+                  <textarea
+                    [value]="userReview"
+                    (input)="userReview = reviewInput.value"
+                    #reviewInput
+                    placeholder="Write your review here..."
+                    class="w-full min-h-[120px] p-4 rounded-lg border border-input bg-background text-foreground shadow-sm focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:outline-none transition-all resize-y"
+                  ></textarea>
+
+                  <button
+                    (click)="submitReview()"
+                    class="mt-6 btn-primary"
+                  >
+                    Submit Review
+                  </button>
+                </div>
+              </div>
+            }
+            @if (book.id) {
+              <app-book-review [bookId]="bookIdNumber"></app-book-review>
+            }
           </div>
-        }
-        @if (book.id) {
-          <app-book-review [bookId]="bookIdNumber"></app-book-review>
-        }
-      </div>
-    </div>
+        </div>
   }
 
   @if (progressTrackerOpen) {
