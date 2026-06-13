@@ -8,7 +8,6 @@ import { Book } from "../../domain/book"
 @Component({
   selector: "app-user-library",
   templateUrl: "./user-library.component.html",
-  styleUrls: ["./user-library.component.css"],
   imports: [CommonModule, RouterModule],
 })
 export class UserLibraryComponent implements OnInit {

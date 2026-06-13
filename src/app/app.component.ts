@@ -13,7 +13,6 @@ import {BookService} from "./application/book.service"
     RouterModule,
   ],
   templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
   title = "reading-tracker-app"

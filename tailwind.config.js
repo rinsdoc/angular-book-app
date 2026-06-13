@@ -7,13 +7,6 @@ module.exports = {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
       },
-      borderWidth: {
-        '3': '3px',
-      },
-      boxShadow: {
-        card: "0 8px 20px rgba(0, 0, 0, 0.08)",
-        "card-dark": "0 8px 20px rgba(0, 0, 0, 0.3)",
-      },
       keyframes: {
         fadeIn: {
           '0%': {opacity: '0'},
@@ -27,17 +20,11 @@ module.exports = {
           '0%': {transform: 'translateY(20px)', opacity: '0'},
           '100%': {transform: 'translateY(0)', opacity: '1'},
         },
-        pulse: {
-          '0%': {boxShadow: '0 8px 25px rgba(0, 0, 0, 0.2)'},
-          '50%': {boxShadow: '0 8px 30px rgba(244, 67, 54, 0.4)'},
-          '100%': {boxShadow: '0 8px 25px rgba(0, 0, 0, 0.2)'},
-        },
       },
       animation: {
         fadeIn: 'fadeIn 0.3s ease-in-out',
         slideIn: 'slideIn 0.3s ease-out',
         slideUp: 'slideUp 0.3s ease-in-out',
-        pulse: 'pulse 2s infinite',
       },
       colors: {
         border: "hsl(var(--border))",

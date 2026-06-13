@@ -6,7 +6,6 @@ import { Review } from "../../domain/review"
 @Component({
   selector: "app-book-review",
   templateUrl: "./book-review.component.html",
-  styleUrls: ["./book-review.component.css"],
   imports: [CommonModule],
 })
 export class BookReviewComponent implements OnInit {

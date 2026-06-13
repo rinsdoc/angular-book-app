@@ -12,7 +12,6 @@ import {UserBook} from '../../domain/user-book';
 @Component({
   selector: "app-book-detail",
   templateUrl: "./book-detail.component.html",
-  styleUrls: ["./book-detail.component.css"],
   imports: [CommonModule, RouterModule, BookReviewComponent],
 })
 export class BookDetailComponent implements OnInit {
