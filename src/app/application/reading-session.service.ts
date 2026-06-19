@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from "@angular/core"
 import { ReadingSession } from '../domain/reading-session';
 import { ReadingSessionRepositoryPort, READING_SESSION_REPOSITORY_PORT } from '../domain/reading-session-repository.port';
-import { BookService } from "../application/book.service";
+import { BookService } from "./book.service";
 import { Book } from "../domain/book";
 import { UserBook } from "../domain/user-book";
 
@@ -18,6 +18,7 @@ export interface UserReadingStats {
 })
 export class ReadingSessionService {
   private repository = inject(READING_SESSION_REPOSITORY_PORT);
+  private bookService = inject(BookService);
   isLoading = signal<boolean>(false)
   error = signal<string | null>(null)
 
@@ -63,9 +64,9 @@ export class ReadingSessionService {
       });
   }
 
-  async getUserReadingStats(userId: number, bookService: BookService): Promise<UserReadingStats> {
-    const books: Book[] = await bookService.getBooks();
-    const userBooks: UserBook[] = await bookService.getUserBooks(userId);
+  async getUserReadingStats(userId: number): Promise<UserReadingStats> {
+    const books: Book[] = await this.bookService.getBooks();
+    const userBooks: UserBook[] = await this.bookService.getUserBooks(userId);
     const sessions: ReadingSession[] = await this.getSessionsByUserId(userId);
 
     const totalBooksRead = userBooks.filter((ub) => ub.status === "read").length;

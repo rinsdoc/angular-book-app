@@ -1,21 +1,23 @@
 import {ChangeDetectorRef, Component, OnInit} from "@angular/core"
 import { CommonModule } from "@angular/common"
-import { FormsModule } from "@angular/forms"
 import { RouterModule } from "@angular/router"
 import { BookService } from "../../application/book.service"
 import { Book } from "../../domain/book"
 
+type SortKey = "rating" | "title" | "pages"
+
 @Component({
   selector: "app-book-list",
   templateUrl: "./book-list.component.html",
-  styleUrls: ["./book-list.component.css"],
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, RouterModule],
 })
 export class BookListComponent implements OnInit {
   books: Book[] = []
   filteredBooks: Book[] = []
+  featuredBook: Book | null = null
   searchTerm = ""
   selectedGenre = ""
+  sortBy: SortKey = "rating"
   genres: string[] = []
   isLoading = true
 
@@ -34,9 +36,10 @@ export class BookListComponent implements OnInit {
     try {
       const books = await this.bookService.getBooks()
       this.books = books
-      this.filteredBooks = books
+      this.featuredBook = [...books].sort((a, b) => b.avgRating - a.avgRating)[0] ?? null
       const allGenres = books.flatMap((book) => book.genres)
       this.genres = [...new Set(allGenres)].sort()
+      this.applyFilters()
     } catch (err) {
       console.error("Error loading books:", err)
     } finally {
@@ -45,22 +48,43 @@ export class BookListComponent implements OnInit {
     }
   }
 
-  searchBooks(): void {
+  onSearchInput(value: string): void {
+    this.searchTerm = value
     this.applyFilters()
   }
 
-  filterByGenre(): void {
+  onGenreChange(value: string): void {
+    this.selectedGenre = value
+    this.applyFilters()
+  }
+
+  onSortChange(value: string): void {
+    this.sortBy = value as SortKey
     this.applyFilters()
   }
 
   resetFilters(): void {
     this.searchTerm = ""
     this.selectedGenre = ""
-    this.filteredBooks = this.books
+    this.sortBy = "rating"
+    this.applyFilters()
+  }
+
+  // Show the featured highlight only when the user isn't actively filtering
+  get showFeatured(): boolean {
+    return !this.searchTerm && !this.selectedGenre
+  }
+
+  // The grid excludes the featured book while the highlight is on screen
+  get gridBooks(): Book[] {
+    if (this.showFeatured && this.featuredBook) {
+      return this.filteredBooks.filter((book) => book.id !== this.featuredBook!.id)
+    }
+    return this.filteredBooks
   }
 
   private applyFilters(): void {
-    this.filteredBooks = this.books.filter((book) => {
+    const filtered = this.books.filter((book) => {
       const matchesSearch =
         this.searchTerm === "" ||
         book.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
@@ -70,5 +94,19 @@ export class BookListComponent implements OnInit {
 
       return matchesSearch && matchesGenre
     })
+
+    this.filteredBooks = this.sortBooks(filtered)
+  }
+
+  private sortBooks(books: Book[]): Book[] {
+    const sorted = [...books]
+    switch (this.sortBy) {
+      case "title":
+        return sorted.sort((a, b) => a.title.localeCompare(b.title))
+      case "pages":
+        return sorted.sort((a, b) => b.pages - a.pages)
+      default:
+        return sorted.sort((a, b) => b.avgRating - a.avgRating)
+    }
   }
 }

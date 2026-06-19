@@ -1,32 +1,20 @@
-import { Component, Input, type OnInit } from "@angular/core"
+import { Component, Input, signal, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
-import { HttpClient } from "@angular/common/http"
-import { type Observable, catchError, map, of, tap } from "rxjs"
-
-interface Review {
-  id: number
-  userBookId: number
-  username: string
-  rating: number
-  reviewText: string
-  date: string
-  bookId: number
-}
+import { ReviewService } from "../../application/review.service"
+import { Review } from "../../domain/review"
 
 @Component({
   selector: "app-book-review",
   templateUrl: "./book-review.component.html",
-  styleUrls: ["./book-review.component.css"],
   imports: [CommonModule],
 })
 export class BookReviewComponent implements OnInit {
   @Input() bookId!: number
-  reviews: Review[] = []
-  isLoading = true
-  error: string | null = null
-  private reviewsUrl = "/assets/reviews.json"
+  reviews = signal<Review[]>([])
+  isLoading = signal(true)
+  error = signal<string | null>(null)
 
-  constructor(private http: HttpClient) {}
+  constructor(private reviewService: ReviewService) {}
 
   ngOnInit(): void {
     if (this.bookId) {
@@ -35,29 +23,18 @@ export class BookReviewComponent implements OnInit {
   }
 
   loadReviews(): void {
-    this.isLoading = true
-    this.getReviewsForBook(this.bookId).subscribe({
-      next: (reviews) => {
-        this.reviews = reviews
-        this.isLoading = false
-      },
-      error: (err) => {
-        this.error = `Failed to load reviews. Error: ${err.message}`
-        this.isLoading = false
+    this.isLoading.set(true)
+    this.reviewService
+      .getReviewsByBookId(this.bookId)
+      .then((reviews) => {
+        this.reviews.set(reviews)
+        this.isLoading.set(false)
+      })
+      .catch((err) => {
+        this.error.set(`Failed to load reviews. Error: ${err.message}`)
+        this.isLoading.set(false)
         console.error("Error loading reviews:", err)
-      },
-    })
-  }
-
-  getReviewsForBook(bookId: number): Observable<Review[]> {
-    return this.http.get<Review[]>(this.reviewsUrl).pipe(
-      map((reviews) => reviews.filter((review) => review.bookId === bookId)),
-      tap((reviews) => {}),
-      catchError((err) => {
-        console.error(`Error fetching reviews for book ${bookId}:`, err)
-        return of([])
-      }),
-    )
+      })
   }
 
   getStarRating(rating: number): string {

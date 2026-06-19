@@ -1,23 +1,18 @@
 // book-detail.component.ts
 import {ChangeDetectorRef, Component, OnInit} from "@angular/core"
 import {CommonModule} from "@angular/common"
-import {FormsModule} from "@angular/forms"
 import {ActivatedRoute, Router, RouterModule} from "@angular/router"
 import {Book} from "../../domain/book"
 import {BookService} from "../../application/book.service"
 import {ReadingSession} from '../../domain/reading-session';
-import {ReadingSessionService} from "../../services/reading-session.service"
+import {ReadingSessionService} from "../../application/reading-session.service"
 import {BookReviewComponent} from "../book-review/book-review.component"
 import {UserBook} from '../../domain/user-book';
-import {NgIcon, provideIcons} from '@ng-icons/core';
-import {lucideX} from '@ng-icons/lucide';
 
 @Component({
   selector: "app-book-detail",
   templateUrl: "./book-detail.component.html",
-  styleUrls: ["./book-detail.component.css"],
-  imports: [CommonModule, FormsModule, RouterModule, BookReviewComponent, NgIcon],
-  providers: [provideIcons({lucideX})],
+  imports: [CommonModule, RouterModule, BookReviewComponent],
 })
 export class BookDetailComponent implements OnInit {
   bookId = ""
@@ -73,6 +68,10 @@ export class BookDetailComponent implements OnInit {
     }
   }
 
+  onStatusChange(status: string): void {
+    this.updateBookStatus(status as UserBook["status"])
+  }
+
   async updateBookStatus(status: UserBook["status"]): Promise<void> {
     if (this.userBook) {
       this.userBook = await this.bookService.updateBookStatus(this.userBook.id, status);
@@ -103,6 +102,12 @@ export class BookDetailComponent implements OnInit {
     this.router.navigate(["/discover"])
   }
 
+  // Five booleans for the average-rating star row
+  get ratingStars(): boolean[] {
+    const rounded = Math.round(this.book?.avgRating ?? 0)
+    return [1, 2, 3, 4, 5].map((i) => i <= rounded)
+  }
+
   // Helper to expose numeric book id to child components
   get bookIdNumber(): number {
     if (!this.book) return 0;
@@ -121,6 +126,7 @@ export class BookDetailComponent implements OnInit {
         } else {
           this.currentPage = 0;
         }
+        this.cdr.detectChanges();
       });
     }
   }

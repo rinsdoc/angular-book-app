@@ -5,32 +5,32 @@
   </h2>
 
   <!-- Loading State -->
-  @if (isLoading) {
+  @if (isLoading()) {
     <div class="flex flex-col items-center justify-center py-8">
       <div class="w-10 h-10 border-4 border-primary/10 border-t-primary rounded-full animate-spin mb-4"></div>
-      <p class="text-text-secondary-light dark:text-text-secondary-dark">Loading reviews...</p>
+      <p class="text-muted-foreground">Loading reviews...</p>
     </div>
   }
 
   <!-- Error Message -->
-  @if (error) {
+  @if (error()) {
     <div class="bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 p-4 rounded-lg mb-6">
-      {{ error }}
+      {{ error() }}
     </div>
   }
 
   <!-- Reviews Content -->
-  @if (!isLoading && !error) {
+  @if (!isLoading() && !error()) {
     <!-- No Reviews -->
-    @if (reviews.length === 0) {
-      <div class="bg-primary/5 p-8 rounded-lg text-center text-text-secondary-light dark:text-text-secondary-dark">
+    @if (reviews().length === 0) {
+      <div class="bg-primary/5 p-8 rounded-lg text-center text-muted-foreground">
         <p>No reviews yet. Be the first to review this book!</p>
       </div>
     }
     <!-- Reviews List -->
-    @if (reviews.length > 0) {
+    @if (reviews().length > 0) {
       <div class="space-y-6">
-        @for (review of reviews; track review) {
+        @for (review of reviews(); track review) {
           <div
             class="bg-primary/5 rounded-lg p-6 transition-all hover:bg-primary/10"
           >
